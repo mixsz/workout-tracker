@@ -5,7 +5,7 @@ import com.mixsz.workouttracker.dto.request.RegisterRequestDTO;
 import com.mixsz.workouttracker.dto.response.LoginResponseDTO;
 import com.mixsz.workouttracker.dto.response.UserResponseDTO;
 import com.mixsz.workouttracker.enums.UserRole;
-import com.mixsz.workouttracker.model.User;
+import com.mixsz.workouttracker.model.UserModel;
 import com.mixsz.workouttracker.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import com.mixsz.workouttracker.infra.security.TokenService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +35,7 @@ public class AuthController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((User) auth.getPrincipal());
+        var token = tokenService.generateToken((UserModel) auth.getPrincipal());
 
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
@@ -46,9 +45,9 @@ public class AuthController {
         if(this.repository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
 
         String encryptedPassword = passwordEncoder.encode(data.password());
-        User newUser = new User(null, data.name(), data.email(), encryptedPassword, UserRole.USER);
+        UserModel newUserModel = new UserModel(null, data.name(), data.email(), encryptedPassword, UserRole.USER);
 
-        this.repository.save(newUser);
+        this.repository.save(newUserModel);
 
         return ResponseEntity.ok().build();
     }

@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class WorkoutLog {
+public class WorkoutLogModel {
 
     @Id
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.UUID)
@@ -25,9 +25,9 @@ public class WorkoutLog {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserModel userModel;
 
     @ManyToOne
     @JoinColumn(name = "workout_id")
-    private Workout workout;
+    private WorkoutModel workoutModel;
 }

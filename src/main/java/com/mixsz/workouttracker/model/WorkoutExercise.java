@@ -26,9 +26,9 @@ public class WorkoutExercise {
 
     @ManyToOne
     @JoinColumn(name = "workout_id")
-    private Workout workout;
+    private WorkoutModel workoutModel;
 
     @ManyToOne
     @JoinColumn(name = "exercise_id")
-    private Exercise exercise;
+    private ExerciseModel exerciseModel;
 }

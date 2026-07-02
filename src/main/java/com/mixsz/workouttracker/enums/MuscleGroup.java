@@ -1,13 +1,23 @@
 package com.mixsz.workouttracker.enums;
 
 public enum MuscleGroup {
-    CHEST("Peito"),
-    BACK("Costa"),
-    SHOULDERS("Ombro"),
-    TRICEPS("Tríceps"),
+    ABDOMINALS("Abdominais"),
+    ABDUCTORS("Abdutores"),
+    ADDUCTORS("Adutores"),
     BICEPS("Bíceps"),
-    LEGS("Perna"),
-    TRAPEZIUS("Trapézio");
+    CALVES("Panturrilha"),
+    CHEST("Peito"),
+    FOREARMS("Antebraço"),
+    GLUTES("Glúteos"),
+    HAMSTRINGS("Posterior de coxa"),
+    LATS("Latíssimo"),
+    LOWER_BACK("Lombar"),
+    MIDDLE_BACK("Dorsal médio"),
+    NECK("Pescoço"),
+    QUADRICEPS("Quadríceps"),
+    TRAPS("Trapézio"),
+    TRICEPS("Tríceps"),
+    SHOULDERS("Ombros");
 
     private String displayName;
 
