@@ -1,4 +1,4 @@
-package com.mixsz.workouttracker.dto.response;
+package com.mixsz.workouttracker.dto.external;
 
 public record NinjaExerciseDTO(String name, String muscle) {
 }

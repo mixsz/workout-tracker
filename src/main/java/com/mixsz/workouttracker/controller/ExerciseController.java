@@ -3,7 +3,7 @@ package com.mixsz.workouttracker.controller;
 import com.mixsz.workouttracker.dto.request.ExerciseRequestDTO;
 import com.mixsz.workouttracker.dto.response.ExerciseResponseDTO;
 import com.mixsz.workouttracker.enums.MuscleGroup;
-import com.mixsz.workouttracker.model.ExerciseModel;
+import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.service.ExerciseService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,13 +35,13 @@ public class ExerciseController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ExerciseResponseDTO> getById(@PathVariable UUID id) {
-        ExerciseModel exercise = exerciseService.findById(id);
+        Exercise exercise = exerciseService.findById(id);
         return ResponseEntity.ok(new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup()));
     }
 
     @PostMapping
     public ResponseEntity<ExerciseResponseDTO> save(@RequestBody ExerciseRequestDTO exerciseRequestDTO){
-        ExerciseModel exercise = exerciseService.save(exerciseRequestDTO);
+        Exercise exercise = exerciseService.save(exerciseRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup())
         );
@@ -50,7 +50,7 @@ public class ExerciseController {
     @PutMapping("/{id}")
     public ResponseEntity<ExerciseResponseDTO> update(@PathVariable UUID id,
                                                       @RequestBody ExerciseRequestDTO exerciseRequestDTO) {
-        ExerciseModel exercise = exerciseService.update(id, exerciseRequestDTO);
+        Exercise exercise = exerciseService.update(id, exerciseRequestDTO);
         return ResponseEntity.ok(new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup()));
     }
 

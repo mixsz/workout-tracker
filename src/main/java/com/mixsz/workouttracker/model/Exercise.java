@@ -1,5 +1,6 @@
 package com.mixsz.workouttracker.model;
 
+import com.mixsz.workouttracker.enums.MuscleGroup;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,19 +10,20 @@ import lombok.Setter;
 import java.util.UUID;
 
 @Entity
-@Table(name = "workout")
+@Table(name = "exercise")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class WorkoutModel {
+public class Exercise {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String title;
+    private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserModel userModel;
+    @Enumerated(EnumType.STRING)
+    private MuscleGroup muscleGroup;
+
 }

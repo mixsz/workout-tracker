@@ -4,9 +4,9 @@ import com.mixsz.workouttracker.dto.request.LoginRequestDTO;
 import com.mixsz.workouttracker.dto.request.RegisterRequestDTO;
 import com.mixsz.workouttracker.dto.response.LoginResponseDTO;
 import com.mixsz.workouttracker.dto.response.UserResponseDTO;
-import com.mixsz.workouttracker.enums.UserRole;
-import com.mixsz.workouttracker.model.UserModel;
+import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.repository.UserRepository;
+import com.mixsz.workouttracker.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ public class AuthController {
     @Autowired
     private TokenService tokenService;
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private AuthService authService;
 
 
     @PostMapping("/login")
@@ -35,24 +35,18 @@ public class AuthController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((UserModel) auth.getPrincipal());
+        var token = tokenService.generateToken((User) auth.getPrincipal());
 
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterRequestDTO data){
-        if(this.repository.findByEmail(data.email()) != null) return ResponseEntity.badRequest().build();
-
-        String encryptedPassword = passwordEncoder.encode(data.password());
-        UserModel newUserModel = new UserModel(null, data.name(), data.email(), encryptedPassword, UserRole.USER);
-
-        this.repository.save(newUserModel);
-
+        authService.register(data);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/login")
+    @GetMapping("/users")
     public ResponseEntity getAllAccounts() {
         var users = this.repository.findAll()
                 .stream()

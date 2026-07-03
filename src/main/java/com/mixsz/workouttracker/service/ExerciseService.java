@@ -1,9 +1,9 @@
 package com.mixsz.workouttracker.service;
 
 import com.mixsz.workouttracker.dto.request.ExerciseRequestDTO;
-import com.mixsz.workouttracker.dto.response.NinjaExerciseDTO;
+import com.mixsz.workouttracker.dto.external.NinjaExerciseDTO;
 import com.mixsz.workouttracker.enums.MuscleGroup;
-import com.mixsz.workouttracker.model.ExerciseModel;
+import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.repository.ExerciseRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,28 +32,17 @@ public class ExerciseService {
         this.restTemplate = restTemplate;
     }
 
-
-    @Transactional
-    public ExerciseModel save(ExerciseRequestDTO exerciseRequestDTO){
-
-        if(exerciseRepository.findByName(exerciseRequestDTO.name()).isPresent()) {
-            throw new RuntimeException("Exercício já cadastrado!");
-        }
-        ExerciseModel exercise = new ExerciseModel();
-        exercise.setName(exerciseRequestDTO.name());
-        exercise.setMuscleGroup(exerciseRequestDTO.muscleGroup());
-        return exerciseRepository.save(exercise);
-    }
-
-    public List<ExerciseModel> findAll() {
+    public List<Exercise> findAll() {
         return exerciseRepository.findAll();
     }
 
-    public ExerciseModel findById(UUID id){
+
+    public Exercise findById(UUID id){
         return exerciseRepository.findById(id).orElseThrow(() -> new RuntimeException("Exercício não encontrado!"));
     }
 
-    public List<ExerciseModel> search(String name, MuscleGroup muscleGroup){
+
+    public List<Exercise> search(String name, MuscleGroup muscleGroup){
         if(name != null && muscleGroup != null){
             return exerciseRepository.findByNameAndMuscleGroup(name, muscleGroup);
         }
@@ -68,19 +57,35 @@ public class ExerciseService {
         }
     }
 
+
     @Transactional
-    public ExerciseModel update(UUID id, ExerciseRequestDTO exerciseRequestDTO){
-        ExerciseModel exercise = this.findById(id);
-        exercise.setName(exerciseRequestDTO.name());
+    public Exercise save(ExerciseRequestDTO exerciseRequestDTO){
+
+        if(exerciseRepository.findByName(exerciseRequestDTO.name().trim()).isPresent()) {
+            throw new RuntimeException("Exercício já cadastrado!");
+        }
+        Exercise exercise = new Exercise();
+        exercise.setName(exerciseRequestDTO.name().trim());
         exercise.setMuscleGroup(exerciseRequestDTO.muscleGroup());
         return exerciseRepository.save(exercise);
     }
 
+
+    @Transactional
+    public Exercise update(UUID id, ExerciseRequestDTO exerciseRequestDTO){
+        Exercise exercise = this.findById(id);
+        exercise.setName(exerciseRequestDTO.name().trim());
+        exercise.setMuscleGroup(exerciseRequestDTO.muscleGroup());
+        return exerciseRepository.save(exercise);
+    }
+
+
     @Transactional
     public void delete(UUID id){
-        ExerciseModel exercise = this.findById(id);
+        Exercise exercise = this.findById(id);
         exerciseRepository.delete(exercise);
     }
+
 
     @Transactional
     public void importFromApi(String muscle) {
@@ -97,7 +102,7 @@ public class ExerciseService {
 
         for (NinjaExerciseDTO dto : response.getBody()) {
             if (exerciseRepository.findByName(dto.name()).isEmpty()) {
-                ExerciseModel exercise = new ExerciseModel();
+                Exercise exercise = new Exercise();
                 exercise.setName(dto.name());
                 exercise.setMuscleGroup(MuscleGroup.valueOf(dto.muscle().toUpperCase().replace(" ", "_")));
                 exerciseRepository.save(exercise);
