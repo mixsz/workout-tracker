@@ -28,7 +28,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
         HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = recoverToken(request);
-        System.out.println("REQUEST: " + request.getMethod() + " " + request.getRequestURI());
         if (token != null){
             String email = tokenService.validateToken(token);
             if (email != null && !email.isBlank()) {
