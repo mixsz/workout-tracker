@@ -1,10 +1,15 @@
 package com.mixsz.workouttracker.service;
 
+import com.mixsz.workouttracker.dto.request.WorkoutLogExerciseRequestDTO;
+import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.model.WorkoutLog;
 import com.mixsz.workouttracker.model.WorkoutLogExercise;
+import com.mixsz.workouttracker.repository.ExerciseRepository;
+import com.mixsz.workouttracker.repository.WorkoutExerciseRepository;
 import com.mixsz.workouttracker.repository.WorkoutLogExerciseRepository;
 import com.mixsz.workouttracker.repository.WorkoutLogRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,13 +18,19 @@ import java.util.UUID;
 @Service
 public class WorkoutLogExerciseService {
 
-    WorkoutLogExerciseRepository workoutLogExerciseRepository;
-    WorkoutLogRepository workoutLogRepository;
+    private final WorkoutLogExerciseRepository workoutLogExerciseRepository;
+    private final WorkoutLogRepository workoutLogRepository;
+    private final ExerciseRepository exerciseRepository;
+    private final WorkoutExerciseRepository workoutExerciseRepository;
 
     public WorkoutLogExerciseService(WorkoutLogExerciseRepository workoutLogExerciseRepository,
-                                     WorkoutLogRepository workoutLogRepository) {
+                                     WorkoutLogRepository workoutLogRepository,
+                                     ExerciseRepository exerciseRepository,
+                                     WorkoutExerciseRepository workoutExerciseRepository) {
         this.workoutLogExerciseRepository = workoutLogExerciseRepository;
         this.workoutLogRepository = workoutLogRepository;
+        this.exerciseRepository = exerciseRepository;
+        this.workoutExerciseRepository = workoutExerciseRepository;
     }
 
     public List<WorkoutLogExercise> findAll(UUID workoutLogId, User user) {
@@ -36,6 +47,49 @@ public class WorkoutLogExerciseService {
 
         return workoutLogExerciseRepository.findByWorkoutLogIdAndExerciseId(workoutLogId, exerciseId)
                 .orElseThrow(() -> new RuntimeException("Exercício não encontrado no registro de treino!"));
+    }
+
+    @Transactional
+    public WorkoutLogExercise addExercise(UUID workoutLogId, WorkoutLogExerciseRequestDTO dto, User user) {
+
+        WorkoutLog workoutLog = workoutLogRepository.findByIdAndUser(workoutLogId, user)
+                .orElseThrow(() -> new RuntimeException("Registro de treino não encontrado!"));
+
+        workoutExerciseRepository.findByWorkoutIdAndExerciseId(workoutLog.getWorkout().getId(), dto.exerciseId())
+                .orElseThrow(() -> new RuntimeException("Exercício não pertence a esse treino!"));
+
+        Exercise exercise = exerciseRepository.findById(dto.exerciseId())
+                .orElseThrow(() -> new RuntimeException("Exercício não encontrado!"));
+
+        if(workoutLogExerciseRepository.findByWorkoutLogIdAndExerciseId(workoutLogId, dto.exerciseId()).isPresent()){
+            throw new RuntimeException("Exercício já registrado nesse log!");
+        }
+
+        WorkoutLogExercise workoutLogExercise = new WorkoutLogExercise();
+        workoutLogExercise.setExercise(exercise);
+        workoutLogExercise.setWorkoutLog(workoutLog);
+        workoutLogExercise.setRepsDone(dto.repsDone());
+        workoutLogExercise.setSetsDone(dto.setsDone());
+        workoutLogExercise.setWeightDone(dto.weightDone());
+
+        return workoutLogExerciseRepository.save(workoutLogExercise);
+    }
+
+    @Transactional
+    public WorkoutLogExercise update(WorkoutLogExerciseRequestDTO dto, UUID workoutLogId,  UUID exerciseId, User user){
+        WorkoutLogExercise workoutLogExercise = findById(workoutLogId, exerciseId, user);
+
+        workoutLogExercise.setRepsDone(dto.repsDone());
+        workoutLogExercise.setSetsDone(dto.setsDone());
+        workoutLogExercise.setWeightDone(dto.weightDone());
+
+        return workoutLogExerciseRepository.save(workoutLogExercise);
+    }
+
+    @Transactional
+    public void delete(UUID workoutLogId, UUID exerciseId, User user){
+        WorkoutLogExercise workoutLogExercise = findById(workoutLogId, exerciseId, user);
+        workoutLogExerciseRepository.delete(workoutLogExercise);
     }
 
 }
