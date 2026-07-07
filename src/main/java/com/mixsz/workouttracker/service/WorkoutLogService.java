@@ -1,5 +1,6 @@
 package com.mixsz.workouttracker.service;
 
+import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.model.Workout;
 import com.mixsz.workouttracker.model.WorkoutLog;
@@ -30,7 +31,7 @@ public class WorkoutLogService {
 
     public List<WorkoutLog> findByWorkout(UUID workoutId, User user){
         Workout workout = workoutRepository.findByIdAndUser(workoutId, user)
-                .orElseThrow(() -> new RuntimeException("Treino não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
 
         return workoutLogRepository.findByWorkoutAndUserOrderByDateDesc(workout, user);
     }
@@ -52,7 +53,7 @@ public class WorkoutLogService {
     @Transactional
     public WorkoutLog addWorkoutLog(UUID workoutId, User user) {
         Workout workout = workoutRepository.findByIdAndUser(workoutId, user)
-                .orElseThrow(() -> new RuntimeException("Treino não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
 
         WorkoutLog workoutLog = new WorkoutLog();
         workoutLog.setWorkout(workout);
@@ -60,5 +61,13 @@ public class WorkoutLogService {
         workoutLog.setDate(LocalDateTime.now());
 
         return workoutLogRepository.save(workoutLog);
+    }
+
+    @Transactional
+    public void deleteWorkoutLog(UUID workoutLogId, User user){
+        WorkoutLog workoutLog = workoutLogRepository.findByIdAndUser(workoutLogId, user)
+                .orElseThrow(() -> new ResourceNotFoundException("Registro de treino não encontrado!"));
+
+        workoutLogRepository.delete(workoutLog);
     }
 }

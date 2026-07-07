@@ -35,7 +35,8 @@ public class WorkoutController {
 
     @GetMapping("/{id}")
     public ResponseEntity<WorkoutResponseDTO> getById(@PathVariable UUID id){
-        Workout workout = workoutService.findById(id);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Workout workout = workoutService.findById(id, user);
         return ResponseEntity.ok(new WorkoutResponseDTO(workout.getId(), workout.getTitle()));
     }
 

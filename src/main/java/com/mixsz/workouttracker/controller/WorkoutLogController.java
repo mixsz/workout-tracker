@@ -100,4 +100,11 @@ public class WorkoutLogController {
 
         return ResponseEntity.status(org.springframework.http.HttpStatus.CREATED).body(workoutLogResponse);
     }
+
+    @DeleteMapping("/{workoutLogId}")
+    public ResponseEntity<Void> deleteWorkoutLog(@PathVariable UUID workoutLogId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        workoutLogService.deleteWorkoutLog(workoutLogId, user);
+        return ResponseEntity.noContent().build();
+    }
 }

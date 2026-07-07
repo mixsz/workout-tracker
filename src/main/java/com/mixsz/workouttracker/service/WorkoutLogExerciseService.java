@@ -1,6 +1,8 @@
 package com.mixsz.workouttracker.service;
 
 import com.mixsz.workouttracker.dto.request.WorkoutLogExerciseRequestDTO;
+import com.mixsz.workouttracker.exception.custom.BusinessException;
+import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.model.WorkoutLog;
@@ -35,34 +37,34 @@ public class WorkoutLogExerciseService {
 
     public List<WorkoutLogExercise> findAll(UUID workoutLogId, User user) {
         WorkoutLog workoutLog = workoutLogRepository.findByIdAndUser(workoutLogId, user)
-                .orElseThrow(() -> new RuntimeException("Registro de treino não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Registro de treino não encontrado!"));
 
         return workoutLogExerciseRepository.findByWorkoutLog(workoutLog);
     }
 
     public WorkoutLogExercise findById(UUID workoutLogId, UUID exerciseId, User user) {
         if (workoutLogRepository.findByIdAndUser(workoutLogId, user).isEmpty()) {
-            throw new RuntimeException("Registro de treino não encontrado!");
+            throw new ResourceNotFoundException("Registro de treino não encontrado!");
         }
 
         return workoutLogExerciseRepository.findByWorkoutLogIdAndExerciseId(workoutLogId, exerciseId)
-                .orElseThrow(() -> new RuntimeException("Exercício não encontrado no registro de treino!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Exercício não encontrado no registro de treino!"));
     }
 
     @Transactional
     public WorkoutLogExercise addExercise(UUID workoutLogId, WorkoutLogExerciseRequestDTO dto, User user) {
 
         WorkoutLog workoutLog = workoutLogRepository.findByIdAndUser(workoutLogId, user)
-                .orElseThrow(() -> new RuntimeException("Registro de treino não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Registro de treino não encontrado!"));
 
         workoutExerciseRepository.findByWorkoutIdAndExerciseId(workoutLog.getWorkout().getId(), dto.exerciseId())
-                .orElseThrow(() -> new RuntimeException("Exercício não pertence a esse treino!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Exercício não pertence a esse treino!"));
 
         Exercise exercise = exerciseRepository.findById(dto.exerciseId())
-                .orElseThrow(() -> new RuntimeException("Exercício não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Exercício não encontrado!"));
 
         if(workoutLogExerciseRepository.findByWorkoutLogIdAndExerciseId(workoutLogId, dto.exerciseId()).isPresent()){
-            throw new RuntimeException("Exercício já registrado nesse log!");
+            throw new BusinessException("Exercício já registrado!");
         }
 
         WorkoutLogExercise workoutLogExercise = new WorkoutLogExercise();

@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import com.mixsz.workouttracker.exception.custom.BusinessException;
 
 @Service
 public class AuthService implements UserDetailsService {
@@ -22,12 +23,16 @@ public class AuthService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("Usuário não encontrado com o email: " + email);
+        }
+        return user;
     }
 
     public void register(RegisterRequestDTO data) {
         if(userRepository.findByEmail(data.email()) != null) {
-            throw new RuntimeException("Email já cadastrado!");
+            throw new BusinessException("Email já cadastrado!");
         }
         String encryptedPassword = passwordEncoder.encode(data.password());
         User newUser = new User(null, data.name().trim(), data.email().trim(), encryptedPassword, UserRole.USER);

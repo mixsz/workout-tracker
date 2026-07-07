@@ -3,6 +3,8 @@ package com.mixsz.workouttracker.service;
 import com.mixsz.workouttracker.dto.request.ExerciseRequestDTO;
 import com.mixsz.workouttracker.dto.external.NinjaExerciseDTO;
 import com.mixsz.workouttracker.enums.MuscleGroup;
+import com.mixsz.workouttracker.exception.custom.BusinessException;
+import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.repository.ExerciseRepository;
 import jakarta.transaction.Transactional;
@@ -38,7 +40,7 @@ public class ExerciseService {
 
 
     public Exercise findById(UUID id){
-        return exerciseRepository.findById(id).orElseThrow(() -> new RuntimeException("Exercício não encontrado!"));
+        return exerciseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Exercício não encontrado!"));
     }
 
 
@@ -62,7 +64,7 @@ public class ExerciseService {
     public Exercise save(ExerciseRequestDTO exerciseRequestDTO){
 
         if(exerciseRepository.findByName(exerciseRequestDTO.name().trim()).isPresent()) {
-            throw new RuntimeException("Exercício já cadastrado!");
+            throw new BusinessException("Exercício já cadastrado!");
         }
         Exercise exercise = new Exercise();
         exercise.setName(exerciseRequestDTO.name().trim());
