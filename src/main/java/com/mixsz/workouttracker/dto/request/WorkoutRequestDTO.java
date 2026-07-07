@@ -1,4 +1,7 @@
 package com.mixsz.workouttracker.dto.request;
 
-public record WorkoutRequestDTO(String title) {
+import jakarta.validation.constraints.NotBlank;
+
+public record WorkoutRequestDTO(@NotBlank(message = "Nome do treino é obrigatório.")
+                                String title) {
 }

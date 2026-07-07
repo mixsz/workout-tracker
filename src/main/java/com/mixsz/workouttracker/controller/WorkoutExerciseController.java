@@ -5,6 +5,7 @@ import com.mixsz.workouttracker.dto.response.ExerciseResponseDTO;
 import com.mixsz.workouttracker.dto.response.WorkoutExerciseResponseDTO;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.service.WorkoutExerciseService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -66,7 +67,8 @@ public class WorkoutExerciseController {
     }
 
     @PostMapping("/{workoutId}")
-    public ResponseEntity<WorkoutExerciseResponseDTO> addExercise(@PathVariable UUID workoutId, @RequestBody WorkoutExerciseRequestDTO dto){
+    public ResponseEntity<WorkoutExerciseResponseDTO> addExercise(@PathVariable UUID workoutId,
+                                                                  @RequestBody @Valid WorkoutExerciseRequestDTO dto){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         var workoutExercise = workoutExerciseService.addExercise(workoutId, dto, user);
@@ -87,8 +89,8 @@ public class WorkoutExerciseController {
 
     @PatchMapping("/{workoutId}/{exerciseId}")
     public ResponseEntity<WorkoutExerciseResponseDTO> update(@PathVariable UUID workoutId,
-                                                                     @PathVariable UUID exerciseId,
-                                                                     @RequestBody WorkoutExerciseRequestDTO dto){
+                                                             @PathVariable UUID exerciseId,
+                                                             @RequestBody @Valid WorkoutExerciseRequestDTO dto){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         var workoutExercise = workoutExerciseService.updateExercise(workoutId, exerciseId, dto, user);

@@ -5,6 +5,7 @@ import com.mixsz.workouttracker.dto.response.WorkoutResponseDTO;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.model.Workout;
 import com.mixsz.workouttracker.service.WorkoutService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,7 +42,7 @@ public class WorkoutController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkoutResponseDTO> save(@RequestBody WorkoutRequestDTO workoutRequestDTO){
+    public ResponseEntity<WorkoutResponseDTO> save(@RequestBody @Valid WorkoutRequestDTO workoutRequestDTO){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Workout workout = workoutService.save(workoutRequestDTO, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(
@@ -49,7 +50,7 @@ public class WorkoutController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WorkoutResponseDTO> update(@PathVariable UUID id, @RequestBody WorkoutRequestDTO dto ){
+    public ResponseEntity<WorkoutResponseDTO> update(@PathVariable UUID id, @RequestBody @Valid WorkoutRequestDTO dto ){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Workout workout = workoutService.update(id, dto, user);
         return ResponseEntity.ok(

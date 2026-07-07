@@ -30,12 +30,12 @@ public class AuthService implements UserDetailsService {
         return user;
     }
 
-    public void register(RegisterRequestDTO data) {
+    public User register(RegisterRequestDTO data) {
         if(userRepository.findByEmail(data.email()) != null) {
             throw new BusinessException("Email já cadastrado!");
         }
         String encryptedPassword = passwordEncoder.encode(data.password());
         User newUser = new User(null, data.name().trim(), data.email().trim(), encryptedPassword, UserRole.USER);
-        userRepository.save(newUser);
+        return userRepository.save(newUser);
     }
 }

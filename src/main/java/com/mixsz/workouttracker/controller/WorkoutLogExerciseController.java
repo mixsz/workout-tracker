@@ -6,6 +6,7 @@ import com.mixsz.workouttracker.dto.response.WorkoutLogExerciseResponseDTO;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.model.WorkoutLogExercise;
 import com.mixsz.workouttracker.service.WorkoutLogExerciseService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,7 +41,7 @@ public class WorkoutLogExerciseController {
         return ResponseEntity.ok(exercises);
     }
 
-    @GetMapping("{workoutLogId}/{exerciseId}")
+    @GetMapping("/{workoutLogId}/{exerciseId}")
     public ResponseEntity<WorkoutLogExerciseResponseDTO> getWorkoutLogExercise(@PathVariable UUID workoutLogId,
                                                                                @PathVariable UUID exerciseId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -58,7 +59,7 @@ public class WorkoutLogExerciseController {
 
     @PostMapping("/{workoutLogId}")
     public ResponseEntity<WorkoutLogExerciseResponseDTO> addWorkoutLogExercise(@PathVariable UUID workoutLogId,
-                                                               @RequestBody WorkoutLogExerciseRequestDTO dto) {
+                                                               @RequestBody @Valid WorkoutLogExerciseRequestDTO dto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         WorkoutLogExercise workoutLogExercise = workoutLogExerciseService.addExercise(workoutLogId, dto, user);
         WorkoutLogExerciseResponseDTO response = new WorkoutLogExerciseResponseDTO(
@@ -75,7 +76,7 @@ public class WorkoutLogExerciseController {
     @PatchMapping("/{workoutLogId}/{exerciseId}")
     public ResponseEntity<WorkoutLogExerciseResponseDTO> updateWorkoutLogExercise(@PathVariable UUID workoutLogId,
                                                                              @PathVariable UUID exerciseId,
-                                                                             @RequestBody WorkoutLogExerciseRequestDTO dto) {
+                                                                             @RequestBody @Valid WorkoutLogExerciseRequestDTO dto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         WorkoutLogExercise workoutLogExercise = workoutLogExerciseService.update(dto, workoutLogId, exerciseId, user);
         WorkoutLogExerciseResponseDTO response = new WorkoutLogExerciseResponseDTO(

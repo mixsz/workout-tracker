@@ -9,12 +9,14 @@ import com.mixsz.workouttracker.repository.UserRepository;
 import com.mixsz.workouttracker.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import com.mixsz.workouttracker.infra.security.TokenService;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/auth")
@@ -31,27 +33,27 @@ public class AuthController {
 
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid LoginRequestDTO data) {
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid LoginRequestDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
         var token = tokenService.generateToken((User) auth.getPrincipal());
 
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterRequestDTO data){
-        authService.register(data);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid RegisterRequestDTO data){
+        User user = authService.register(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getRole()));
     }
 
     @GetMapping("/users")
-    public ResponseEntity getAllAccounts() {
+    public ResponseEntity<List<UserResponseDTO>> getAllAccounts() {
         var users = this.repository.findAll()
                 .stream()
                 .map(user -> new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getRole()))
                 .toList();
-        return ResponseEntity.ok(users);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 }

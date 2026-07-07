@@ -5,6 +5,7 @@ import com.mixsz.workouttracker.dto.response.ExerciseResponseDTO;
 import com.mixsz.workouttracker.enums.MuscleGroup;
 import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.service.ExerciseService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +41,7 @@ public class ExerciseController {
     }
 
     @PostMapping
-    public ResponseEntity<ExerciseResponseDTO> save(@RequestBody ExerciseRequestDTO exerciseRequestDTO){
+    public ResponseEntity<ExerciseResponseDTO> save(@RequestBody @Valid ExerciseRequestDTO exerciseRequestDTO){
         Exercise exercise = exerciseService.save(exerciseRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup())
@@ -49,7 +50,7 @@ public class ExerciseController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ExerciseResponseDTO> update(@PathVariable UUID id,
-                                                      @RequestBody ExerciseRequestDTO exerciseRequestDTO) {
+                                                      @RequestBody @Valid ExerciseRequestDTO exerciseRequestDTO) {
         Exercise exercise = exerciseService.update(id, exerciseRequestDTO);
         return ResponseEntity.ok(new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup()));
     }
