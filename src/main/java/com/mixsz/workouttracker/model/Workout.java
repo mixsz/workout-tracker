@@ -21,6 +21,8 @@ public class Workout {
 
     private String title;
 
+    private int position;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

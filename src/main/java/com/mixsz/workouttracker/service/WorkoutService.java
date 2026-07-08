@@ -1,5 +1,6 @@
 package com.mixsz.workouttracker.service;
 
+import com.mixsz.workouttracker.dto.request.ReorderWorkoutRequestDTO;
 import com.mixsz.workouttracker.dto.request.WorkoutRequestDTO;
 import com.mixsz.workouttracker.exception.custom.BusinessException;
 import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
@@ -23,7 +24,7 @@ public class WorkoutService {
     }
 
     public List<Workout> findAll(User user){
-        return workoutRepository.findByUser(user);
+        return workoutRepository.findByUserOrderByPositionAsc(user);
     }
 
 
@@ -41,6 +42,7 @@ public class WorkoutService {
         Workout workout = new Workout();
         workout.setTitle(dto.title().trim());
         workout.setUser(user);
+        workout.setPosition(workoutRepository.countByUser(user));
         return workoutRepository.save(workout);
     }
 
@@ -52,13 +54,40 @@ public class WorkoutService {
         Workout workout = workoutRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
         workout.setTitle(dto.title());
+        workout.setPosition(workoutRepository.countByUser(user));
         return workoutRepository.save(workout);
+    }
+
+    @Transactional
+    public List<Workout> reorderWorkouts(ReorderWorkoutRequestDTO dto, User user){
+        List<Workout> workouts = workoutRepository.findByUserOrderByPositionAsc(user);
+        if(dto.workoutIds().size() != workouts.size()){
+            throw new BusinessException("A quantidade de treinos não corresponde!");
+        }
+        for(int i = 0; i < dto.workoutIds().size(); i++){
+            UUID workoutId = dto.workoutIds().get(i);
+            Workout workout = workouts.stream()
+                    .filter(w -> w.getId().equals(workoutId))
+                    .findFirst()
+                    .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
+            workout.setPosition(i);
+            workoutRepository.save(workout);
+        }
+        return workoutRepository.findByUserOrderByPositionAsc(user);
     }
 
     @Transactional
     public void delete(User user, UUID id){
         Workout workout = workoutRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
+
+        int pos = workout.getPosition();
+        List<Workout> workouts = workoutRepository.findByUserAndPositionGreaterThan(user, pos);
+        for(Workout w : workouts){
+            w.setPosition(w.getPosition() - 1);
+            workoutRepository.save(w);
+        }
+
         workoutRepository.delete(workout);
     }
 

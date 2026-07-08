@@ -1,5 +1,6 @@
 package com.mixsz.workouttracker.controller;
 
+import com.mixsz.workouttracker.dto.request.ReorderWorkoutRequestDTO;
 import com.mixsz.workouttracker.dto.request.WorkoutRequestDTO;
 import com.mixsz.workouttracker.dto.response.WorkoutResponseDTO;
 import com.mixsz.workouttracker.model.User;
@@ -29,7 +30,7 @@ public class WorkoutController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<WorkoutResponseDTO> workouts = workoutService.findAll(user)
                 .stream()
-                .map(w -> new WorkoutResponseDTO(w.getId(), w.getTitle()))
+                .map(w -> new WorkoutResponseDTO(w.getId(), w.getTitle(), w.getPosition()))
                 .toList();
         return ResponseEntity.ok(workouts);
     }
@@ -38,7 +39,7 @@ public class WorkoutController {
     public ResponseEntity<WorkoutResponseDTO> getById(@PathVariable UUID id){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Workout workout = workoutService.findById(id, user);
-        return ResponseEntity.ok(new WorkoutResponseDTO(workout.getId(), workout.getTitle()));
+        return ResponseEntity.ok(new WorkoutResponseDTO(workout.getId(), workout.getTitle(), workout.getPosition()));
     }
 
     @PostMapping
@@ -46,7 +47,7 @@ public class WorkoutController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Workout workout = workoutService.save(workoutRequestDTO, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new WorkoutResponseDTO(workout.getId(), workout.getTitle()));
+                new WorkoutResponseDTO(workout.getId(), workout.getTitle(), workout.getPosition()));
     }
 
     @PutMapping("/{id}")
@@ -54,7 +55,17 @@ public class WorkoutController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Workout workout = workoutService.update(id, dto, user);
         return ResponseEntity.ok(
-                new WorkoutResponseDTO(workout.getId(), workout.getTitle()));
+                new WorkoutResponseDTO(workout.getId(), workout.getTitle(), workout.getPosition()));
+    }
+
+    @PutMapping("/reorder")
+    public ResponseEntity<List<WorkoutResponseDTO>> reorderWorkouts(@RequestBody @Valid ReorderWorkoutRequestDTO dto){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Workout> workouts = workoutService.reorderWorkouts(dto, user);
+        List<WorkoutResponseDTO> response = workouts.stream()
+                .map(w -> new WorkoutResponseDTO(w.getId(), w.getTitle(), w.getPosition()))
+                .toList();
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
@@ -65,5 +76,3 @@ public class WorkoutController {
     }
 
 }
-
-
