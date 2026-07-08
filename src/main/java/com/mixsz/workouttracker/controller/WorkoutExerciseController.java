@@ -1,5 +1,6 @@
 package com.mixsz.workouttracker.controller;
 
+import com.mixsz.workouttracker.dto.request.ReorderWorkoutExerciseRequestDTO;
 import com.mixsz.workouttracker.dto.request.WorkoutExerciseRequestDTO;
 import com.mixsz.workouttracker.dto.response.ExerciseResponseDTO;
 import com.mixsz.workouttracker.dto.response.WorkoutExerciseResponseDTO;
@@ -38,7 +39,8 @@ public class WorkoutExerciseController {
                                 we.getExercise().getId(),
                                 we.getExercise().getName(),
                                 we.getExercise().getMuscleGroup()
-                        )
+                        ),
+                        we.getPosition()
                 ))
                 .toList();
 
@@ -60,7 +62,8 @@ public class WorkoutExerciseController {
                         workoutExercise.getExercise().getId(),
                         workoutExercise.getExercise().getName(),
                         workoutExercise.getExercise().getMuscleGroup()
-                )
+                ),
+                workoutExercise.getPosition()
         );
 
         return ResponseEntity.ok(responseDTO);
@@ -81,7 +84,8 @@ public class WorkoutExerciseController {
                         workoutExercise.getExercise().getId(),
                         workoutExercise.getExercise().getName(),
                         workoutExercise.getExercise().getMuscleGroup()
-                )
+                ),
+                workoutExercise.getPosition()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
@@ -103,10 +107,36 @@ public class WorkoutExerciseController {
                         workoutExercise.getExercise().getId(),
                         workoutExercise.getExercise().getName(),
                         workoutExercise.getExercise().getMuscleGroup()
-                )
+                ),
+                workoutExercise.getPosition()
         );
 
         return ResponseEntity.ok(responseDTO);
+    }
+
+    @PutMapping("/{workoutId}/reorder")
+    public ResponseEntity<List<WorkoutExerciseResponseDTO>> reorderExercises(@PathVariable UUID workoutId,
+            @RequestBody @Valid ReorderWorkoutExerciseRequestDTO dto){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        var workoutExercises = workoutExerciseService.reorderExercises(workoutId, dto, user);
+
+
+        List<WorkoutExerciseResponseDTO> responseDTOs = workoutExercises.stream()
+                .map(workoutExercise -> new WorkoutExerciseResponseDTO(
+                        workoutExercise.getId(),
+                        workoutExercise.getSets(),
+                        workoutExercise.getReps(),
+                        new ExerciseResponseDTO(
+                                workoutExercise.getExercise().getId(),
+                                workoutExercise.getExercise().getName(),
+                                workoutExercise.getExercise().getMuscleGroup()
+                        ),
+                        workoutExercise.getPosition()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(responseDTOs);
     }
 
     @DeleteMapping("/{workoutId}/{exerciseId}")
