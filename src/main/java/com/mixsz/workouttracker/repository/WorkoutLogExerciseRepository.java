@@ -11,6 +11,6 @@ import java.util.UUID;
 
 @Repository
 public interface WorkoutLogExerciseRepository extends JpaRepository <WorkoutLogExercise, UUID> {
-    List<WorkoutLogExercise> findByWorkoutLog(WorkoutLog workoutLog);
+    List<WorkoutLogExercise> findByWorkoutLogOrderByPositionAsc(WorkoutLog workoutLog);
     Optional<WorkoutLogExercise> findByWorkoutLogIdAndExerciseId(UUID workoutLogId, UUID exerciseId);
 }

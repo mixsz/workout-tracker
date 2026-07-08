@@ -26,6 +26,8 @@ public class WorkoutLogExercise {
 
     private int repsDone;
 
+    private int position;
+
     @ManyToOne
     @JoinColumn(name = "workout_log_id")
     private WorkoutLog workoutLog;

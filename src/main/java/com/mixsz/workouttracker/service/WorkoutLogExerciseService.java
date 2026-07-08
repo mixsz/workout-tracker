@@ -3,10 +3,7 @@ package com.mixsz.workouttracker.service;
 import com.mixsz.workouttracker.dto.request.WorkoutLogExerciseRequestDTO;
 import com.mixsz.workouttracker.exception.custom.BusinessException;
 import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
-import com.mixsz.workouttracker.model.Exercise;
-import com.mixsz.workouttracker.model.User;
-import com.mixsz.workouttracker.model.WorkoutLog;
-import com.mixsz.workouttracker.model.WorkoutLogExercise;
+import com.mixsz.workouttracker.model.*;
 import com.mixsz.workouttracker.repository.ExerciseRepository;
 import com.mixsz.workouttracker.repository.WorkoutExerciseRepository;
 import com.mixsz.workouttracker.repository.WorkoutLogExerciseRepository;
@@ -39,7 +36,7 @@ public class WorkoutLogExerciseService {
         WorkoutLog workoutLog = workoutLogRepository.findByIdAndUser(workoutLogId, user)
                 .orElseThrow(() -> new ResourceNotFoundException("Registro de treino não encontrado!"));
 
-        return workoutLogExerciseRepository.findByWorkoutLog(workoutLog);
+        return workoutLogExerciseRepository.findByWorkoutLogOrderByPositionAsc(workoutLog);
     }
 
     public WorkoutLogExercise findById(UUID workoutLogId, UUID exerciseId, User user) {
@@ -57,7 +54,8 @@ public class WorkoutLogExerciseService {
         WorkoutLog workoutLog = workoutLogRepository.findByIdAndUser(workoutLogId, user)
                 .orElseThrow(() -> new ResourceNotFoundException("Registro de treino não encontrado!"));
 
-        workoutExerciseRepository.findByWorkoutIdAndExerciseId(workoutLog.getWorkout().getId(), dto.exerciseId())
+        WorkoutExercise workoutExercise = workoutExerciseRepository.findByWorkoutIdAndExerciseId(workoutLog.getWorkout().getId(),
+                                                                                                dto.exerciseId())
                 .orElseThrow(() -> new ResourceNotFoundException("Exercício não pertence a esse treino!"));
 
         Exercise exercise = exerciseRepository.findById(dto.exerciseId())
@@ -73,7 +71,7 @@ public class WorkoutLogExerciseService {
         workoutLogExercise.setRepsDone(dto.repsDone());
         workoutLogExercise.setSetsDone(dto.setsDone());
         workoutLogExercise.setWeightDone(dto.weightDone());
-
+        workoutLogExercise.setPosition(workoutExercise.getPosition());
         return workoutLogExerciseRepository.save(workoutLogExercise);
     }
 

@@ -35,7 +35,8 @@ public class WorkoutLogExerciseController {
                         new ExerciseResponseDTO(e.getExercise().getId(), e.getExercise().getName(), e.getExercise().getMuscleGroup()),
                         e.getWeightDone(),
                         e.getSetsDone(),
-                        e.getRepsDone()
+                        e.getRepsDone(),
+                        e.getPosition()
                 ))
                 .toList();
         return ResponseEntity.ok(exercises);
@@ -52,7 +53,8 @@ public class WorkoutLogExerciseController {
                         workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup()),
                 workoutLogExercise.getWeightDone(),
                 workoutLogExercise.getSetsDone(),
-                workoutLogExercise.getRepsDone()
+                workoutLogExercise.getRepsDone(),
+                workoutLogExercise.getPosition()
         );
         return ResponseEntity.ok(response);
     }
@@ -68,7 +70,8 @@ public class WorkoutLogExerciseController {
                         workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup()),
                 workoutLogExercise.getWeightDone(),
                 workoutLogExercise.getSetsDone(),
-                workoutLogExercise.getRepsDone()
+                workoutLogExercise.getRepsDone(),
+                workoutLogExercise.getPosition()
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -85,7 +88,8 @@ public class WorkoutLogExerciseController {
                         workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup()),
                 workoutLogExercise.getWeightDone(),
                 workoutLogExercise.getSetsDone(),
-                workoutLogExercise.getRepsDone()
+                workoutLogExercise.getRepsDone(),
+                workoutLogExercise.getPosition()
         );
         return ResponseEntity.ok(response);
     }
