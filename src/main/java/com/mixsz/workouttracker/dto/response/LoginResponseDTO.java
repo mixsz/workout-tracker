@@ -1,4 +1,4 @@
 package com.mixsz.workouttracker.dto.response;
 
-public record LoginResponseDTO(String token) {
+public record LoginResponseDTO(String token, String refreshToken) {
 }
