@@ -17,4 +17,8 @@ public interface WorkoutLogRepository extends JpaRepository<WorkoutLog, UUID> {
     Optional<WorkoutLog> findByIdAndUser(UUID id, User user);
     List<WorkoutLog> findByUserAndDateBetweenOrderByDateDesc(User user, LocalDateTime start, LocalDateTime end);
     List<WorkoutLog> findByUserOrderByDateDesc(User user);
+    List<WorkoutLog> findByWorkoutAndUserAndDateBetweenOrderByDateDesc(Workout workout,
+                                                                       User user,
+                                                                       LocalDateTime start,
+                                                                       LocalDateTime end);
 }

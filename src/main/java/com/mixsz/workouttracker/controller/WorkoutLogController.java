@@ -87,6 +87,25 @@ public class WorkoutLogController {
         return ResponseEntity.ok(workoutLogs);
     }
 
+    @GetMapping("/date/between/{workoutId}")
+    public ResponseEntity <List<WorkoutLogResponseDTO>> getWorkoutLogBetweenDateByWorkout(
+                                                        @PathVariable UUID workoutId,
+                                                        @RequestParam LocalDate start,
+                                                        @RequestParam LocalDate end){
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<WorkoutLogResponseDTO> workoutLogs = workoutLogService.findByDateBetweenAndWorkout(start, end, workoutId, user)
+                .stream()
+                .map(log -> new WorkoutLogResponseDTO(
+                        log.getId(),
+                        log.getWorkout().getId(),
+                        log.getWorkout().getTitle(),
+                        log.getDate()
+                ))
+                .toList();
+
+        return ResponseEntity.ok(workoutLogs);
+    }
+
     @PostMapping("/{workoutId}")
     public ResponseEntity<WorkoutLogResponseDTO> addWorkoutLog(@PathVariable UUID workoutId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

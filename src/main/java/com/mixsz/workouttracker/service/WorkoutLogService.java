@@ -50,6 +50,17 @@ public class WorkoutLogService {
                 end.atTime(23,59,59));
     }
 
+    public List<WorkoutLog> findByDateBetweenAndWorkout(LocalDate start, LocalDate end, UUID workoutId, User user) {
+        Workout workout = workoutRepository.findByIdAndUser(workoutId, user)
+                .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
+
+        return workoutLogRepository.findByWorkoutAndUserAndDateBetweenOrderByDateDesc(
+                workout,
+                user,
+                start.atStartOfDay(),
+                end.atTime(23,59,59));
+    }
+
     @Transactional
     public WorkoutLog addWorkoutLog(UUID workoutId, User user) {
         Workout workout = workoutRepository.findByIdAndUser(workoutId, user)
