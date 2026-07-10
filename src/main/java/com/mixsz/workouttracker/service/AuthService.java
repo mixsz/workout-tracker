@@ -31,6 +31,9 @@ public class AuthService implements UserDetailsService {
     }
 
     public User register(RegisterRequestDTO data) {
+        if (!data.password().equals(data.confirmPassword())) {
+            throw new BusinessException("As senhas não coincidem!");
+        }
         if(userRepository.findByEmail(data.email()) != null) {
             throw new BusinessException("Email já cadastrado!");
         }

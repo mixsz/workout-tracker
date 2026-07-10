@@ -22,5 +22,7 @@ public record RegisterRequestDTO(@NotBlank(message = "Nome é obrigatório.")
                                          regexp = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[!@#$%^&*(),.?\":{}|<>]).*$",
                                          message = "A senha deve conter pelo menos um número, uma letra maiúscula e um caractere especial."
                                  )
-                                 String password) {
+                                 String password,
+
+                                 String confirmPassword) {
 }

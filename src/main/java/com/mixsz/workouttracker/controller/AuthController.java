@@ -49,7 +49,7 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<UserResponseDTO> getMyAccount(){
+    public ResponseEntity<UserResponseDTO> getMyAccount() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.status(HttpStatus.OK).body(new UserResponseDTO(user.getId(), user.getName(),
@@ -68,12 +68,12 @@ public class AuthController {
         var refreshToken = refreshTokenService.createRefreshToken(user);
 
 
-        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(token,refreshToken.getToken()));
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(token, refreshToken.getToken()));
     }
 
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid RegisterRequestDTO data){
+    public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid RegisterRequestDTO data) {
         User user = authService.register(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getRole()));
     }
@@ -94,5 +94,4 @@ public class AuthController {
         refreshTokenService.deleteRefreshToken(data.refreshToken());
         return ResponseEntity.noContent().build();
     }
-
 }
