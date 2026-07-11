@@ -8,12 +8,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class WorkouttrackerApplication {
 
 	public static void main(String[] args) {
-		Dotenv dotenv = Dotenv.load();
-		System.setProperty("DB_URL", dotenv.get("DB_URL"));
-		System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
-		System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
-		System.setProperty("DB_TOKEN_SECRET", dotenv.get("DB_TOKEN_SECRET"));
-		System.setProperty("NINJA_API_KEY", dotenv.get("NINJA_API_KEY"));
+		Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+
+		if(dotenv.get("DB_URL") != null) {
+			System.setProperty("DB_URL", dotenv.get("DB_URL"));
+			System.setProperty("DB_USERNAME", dotenv.get("DB_USERNAME"));
+			System.setProperty("DB_PASSWORD", dotenv.get("DB_PASSWORD"));
+			System.setProperty("DB_TOKEN_SECRET", dotenv.get("DB_TOKEN_SECRET"));
+			System.setProperty("NINJA_API_KEY", dotenv.get("NINJA_API_KEY"));
+		}
 
 		SpringApplication.run(WorkouttrackerApplication.class, args);
 
