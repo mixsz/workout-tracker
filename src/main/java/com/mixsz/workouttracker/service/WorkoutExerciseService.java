@@ -58,7 +58,7 @@ public class WorkoutExerciseService {
         }
 
         Exercise exercise = exerciseRepository.findById(dto.exerciseId())
-                .orElseThrow(() -> new ResourceNotFoundException("Exercício não encontrado!"));
+                .orElseThrow(() -> new ResourceNotFoundException("Exercício não encontrado no catálogo!"));
 
         WorkoutExercise workoutExercise = new WorkoutExercise();
         workoutExercise.setWorkout(workout);
