@@ -30,7 +30,7 @@ public class AuthServiceTest {
     private AuthService authService;
 
     @Test
-    void lancarExcessaoQuandoAsSenhasNaoCoincidem(){
+    void lancarExcecaoQuandoAsSenhasNaoCoincidem(){
         RegisterRequestDTO registerRequestDTO = new RegisterRequestDTO(
                 "Test User", "email@email.com", "senhasS567**", "senhaS123!!");
 
@@ -38,7 +38,7 @@ public class AuthServiceTest {
     }
 
         @Test
-        void lancaExcessaoQuandoEmailNaoForEncontrado(){
+        void lancaExcecaoQuandoEmailNaoForEncontrado(){
             String email = "emailaa@email.com";
             Mockito.when(userRepository.findByEmail(email)).thenReturn(null);
             assertThrows(UsernameNotFoundException.class, () -> authService.loadUserByUsername(email));

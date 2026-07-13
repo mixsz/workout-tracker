@@ -10,8 +10,6 @@ import com.mixsz.workouttracker.model.WorkoutExercise;
 import com.mixsz.workouttracker.repository.ExerciseRepository;
 import com.mixsz.workouttracker.repository.WorkoutExerciseRepository;
 import com.mixsz.workouttracker.repository.WorkoutRepository;
-import lombok.extern.slf4j.Slf4j;
-import org.hibernate.jdbc.Work;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,7 +24,6 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 public class WorkoutExerciseServiceTest {
 
