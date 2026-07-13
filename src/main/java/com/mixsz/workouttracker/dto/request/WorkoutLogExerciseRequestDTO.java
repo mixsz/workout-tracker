@@ -1,5 +1,6 @@
 package com.mixsz.workouttracker.dto.request;
 
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -10,11 +11,13 @@ public record WorkoutLogExerciseRequestDTO(@NotNull(message = "Exercício é obr
                                            UUID exerciseId,
 
                                            @PositiveOrZero(message = "Peso inválido.")
-                                           int weightDone,
+                                           @Digits(integer = 6, fraction = 2, message = "Peso precisa ter no máximo 2 casas decimais.")
+                                           double weightDone,
 
                                            @Positive(message = "Número de séries inválido.")
                                            int setsDone,
 
                                            @Positive(message = "Número de repetições inválido.")
+
                                            int repsDone) {
 }
