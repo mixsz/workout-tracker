@@ -72,6 +72,7 @@ O fluxo de autenticação segue o padrão JWT:
 1. Registre um usuário em `POST /auth/register`
 2. Faça login em `POST /auth/login` e receba um `token` e `refreshToken`
 3. Envie o token nas requisições protegidas via header:
+
    ```
    Authorization: Bearer <token>
    ```
