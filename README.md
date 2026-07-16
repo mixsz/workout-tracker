@@ -168,6 +168,10 @@ src/main/java/com/mixsz/workouttracker/
 └── enums/            # Enums do domínio (MuscleGroup e UserRole)
 ```
 
+## Modelo de Dados
+
+![Diagrama ER](assets/er-diagram.png)
+
 ## Status do projeto
 
 Projeto desenvolvido para estudo prático de Spring Boot, cobrindo desde a
