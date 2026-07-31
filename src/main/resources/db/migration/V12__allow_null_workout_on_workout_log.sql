@@ -1,0 +1,1 @@
+ALTER TABLE workout_log ALTER COLUMN workout_id DROP NOT NULL;

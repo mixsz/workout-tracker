@@ -6,6 +6,8 @@ import com.mixsz.workouttracker.exception.custom.BusinessException;
 import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.model.Workout;
+import com.mixsz.workouttracker.model.WorkoutLog;
+import com.mixsz.workouttracker.repository.WorkoutLogRepository;
 import com.mixsz.workouttracker.repository.WorkoutRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -18,9 +20,11 @@ import java.util.UUID;
 public class WorkoutService {
 
     private final WorkoutRepository workoutRepository;
+    private final WorkoutLogRepository workoutLogRepository;
 
-    public WorkoutService(WorkoutRepository workoutRepository){
+    public WorkoutService(WorkoutRepository workoutRepository, WorkoutLogRepository workoutLogRepository){
         this.workoutRepository = workoutRepository;
+        this.workoutLogRepository = workoutLogRepository;
     }
 
     public List<Workout> findAll(User user){
@@ -80,6 +84,12 @@ public class WorkoutService {
     public void delete(User user, UUID id){
         Workout workout = workoutRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
+
+        List<WorkoutLog> logs = workoutLogRepository.findByWorkout(workout);
+        for (WorkoutLog log : logs) {
+            log.setWorkout(null);
+            workoutLogRepository.save(log);
+        }
 
         int pos = workout.getPosition();
         List<Workout> workouts = workoutRepository.findByUserAndPositionGreaterThan(user, pos);

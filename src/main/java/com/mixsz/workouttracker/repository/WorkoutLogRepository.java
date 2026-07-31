@@ -21,4 +21,5 @@ public interface WorkoutLogRepository extends JpaRepository<WorkoutLog, UUID> {
                                                                        User user,
                                                                        LocalDateTime start,
                                                                        LocalDateTime end);
+    List<WorkoutLog> findByWorkout(Workout workout);
 }
