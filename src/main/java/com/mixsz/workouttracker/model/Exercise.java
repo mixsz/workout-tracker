@@ -26,4 +26,6 @@ public class Exercise {
     @Enumerated(EnumType.STRING)
     private MuscleGroup muscleGroup;
 
+    private String description;
+
 }

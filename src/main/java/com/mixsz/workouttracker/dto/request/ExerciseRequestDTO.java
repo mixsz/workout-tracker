@@ -8,6 +8,9 @@ public record ExerciseRequestDTO(@NotBlank(message = "Nome de exercício obrigat
                                  String name,
 
                                  @NotNull (message = "Grupo muscular obrigatório")
-                                 MuscleGroup muscleGroup) {
+                                 MuscleGroup muscleGroup,
+
+                                 @NotBlank (message = "Descrição obrigatória")
+                                 String description) {
 
 }

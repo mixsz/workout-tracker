@@ -103,7 +103,7 @@ public class ExerciseServiceTest {
     @Test
     void lancaErroAoTentarCadastrarExercicioJaExistente(){
         Exercise exercise = new Exercise();
-        ExerciseRequestDTO exerciseRequestDTO = new ExerciseRequestDTO("Nome", MuscleGroup.CHEST);
+        ExerciseRequestDTO exerciseRequestDTO = new ExerciseRequestDTO("Nome", MuscleGroup.CHEST, "desc teste");
 
         Mockito.when(exerciseRepository.findByName(exerciseRequestDTO.name().trim())).thenReturn(Optional.of(exercise));
 
@@ -112,7 +112,7 @@ public class ExerciseServiceTest {
 
     @Test
     void retornaExercicioCriado(){
-        ExerciseRequestDTO exerciseRequestDTO = new ExerciseRequestDTO("Nome", MuscleGroup.CHEST);
+        ExerciseRequestDTO exerciseRequestDTO = new ExerciseRequestDTO("Nome", MuscleGroup.CHEST, "desc teste");
         Exercise exercise = new Exercise();
         exercise.setName(exerciseRequestDTO.name().trim());
 

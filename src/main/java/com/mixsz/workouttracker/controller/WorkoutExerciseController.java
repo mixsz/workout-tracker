@@ -38,7 +38,8 @@ public class WorkoutExerciseController {
                         new ExerciseResponseDTO(
                                 we.getExercise().getId(),
                                 we.getExercise().getName(),
-                                we.getExercise().getMuscleGroup()
+                                we.getExercise().getMuscleGroup(),
+                                we.getExercise().getDescription()
                         ),
                         we.getPosition()
                 ))
@@ -61,7 +62,8 @@ public class WorkoutExerciseController {
                 new ExerciseResponseDTO(
                         workoutExercise.getExercise().getId(),
                         workoutExercise.getExercise().getName(),
-                        workoutExercise.getExercise().getMuscleGroup()
+                        workoutExercise.getExercise().getMuscleGroup(),
+                        workoutExercise.getExercise().getDescription()
                 ),
                 workoutExercise.getPosition()
         );
@@ -83,7 +85,8 @@ public class WorkoutExerciseController {
                 new ExerciseResponseDTO(
                         workoutExercise.getExercise().getId(),
                         workoutExercise.getExercise().getName(),
-                        workoutExercise.getExercise().getMuscleGroup()
+                        workoutExercise.getExercise().getMuscleGroup(),
+                        workoutExercise.getExercise().getDescription()
                 ),
                 workoutExercise.getPosition()
         );
@@ -106,7 +109,8 @@ public class WorkoutExerciseController {
                 new ExerciseResponseDTO(
                         workoutExercise.getExercise().getId(),
                         workoutExercise.getExercise().getName(),
-                        workoutExercise.getExercise().getMuscleGroup()
+                        workoutExercise.getExercise().getMuscleGroup(),
+                        workoutExercise.getExercise().getDescription()
                 ),
                 workoutExercise.getPosition()
         );
@@ -130,7 +134,8 @@ public class WorkoutExerciseController {
                         new ExerciseResponseDTO(
                                 workoutExercise.getExercise().getId(),
                                 workoutExercise.getExercise().getName(),
-                                workoutExercise.getExercise().getMuscleGroup()
+                                workoutExercise.getExercise().getMuscleGroup(),
+                                workoutExercise.getExercise().getDescription()
                         ),
                         workoutExercise.getPosition()
                 ))

@@ -32,7 +32,8 @@ public class WorkoutLogExerciseController {
                 .stream()
                 .map(e -> new WorkoutLogExerciseResponseDTO(
                         e.getId(),
-                        new ExerciseResponseDTO(e.getExercise().getId(), e.getExercise().getName(), e.getExercise().getMuscleGroup()),
+                        new ExerciseResponseDTO(e.getExercise().getId(), e.getExercise().getName(),
+                                e.getExercise().getMuscleGroup(),e.getExercise().getDescription()),
                         e.getWeightDone(),
                         e.getSetsDone(),
                         e.getRepsDone(),
@@ -50,7 +51,8 @@ public class WorkoutLogExerciseController {
         WorkoutLogExerciseResponseDTO response = new WorkoutLogExerciseResponseDTO(
                 workoutLogExercise.getId(),
                 new ExerciseResponseDTO(workoutLogExercise.getExercise().getId(),
-                        workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup()),
+                        workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup(),
+                        workoutLogExercise.getExercise().getDescription()),
                 workoutLogExercise.getWeightDone(),
                 workoutLogExercise.getSetsDone(),
                 workoutLogExercise.getRepsDone(),
@@ -67,7 +69,8 @@ public class WorkoutLogExerciseController {
         WorkoutLogExerciseResponseDTO response = new WorkoutLogExerciseResponseDTO(
                 workoutLogExercise.getId(),
                 new ExerciseResponseDTO(workoutLogExercise.getExercise().getId(),
-                        workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup()),
+                        workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup(),
+                        workoutLogExercise.getExercise().getDescription()),
                 workoutLogExercise.getWeightDone(),
                 workoutLogExercise.getSetsDone(),
                 workoutLogExercise.getRepsDone(),
@@ -85,7 +88,8 @@ public class WorkoutLogExerciseController {
         WorkoutLogExerciseResponseDTO response = new WorkoutLogExerciseResponseDTO(
                 workoutLogExercise.getId(),
                 new ExerciseResponseDTO(workoutLogExercise.getExercise().getId(),
-                        workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup()),
+                        workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup(),
+                        workoutLogExercise.getExercise().getDescription()),
                 workoutLogExercise.getWeightDone(),
                 workoutLogExercise.getSetsDone(),
                 workoutLogExercise.getRepsDone(),

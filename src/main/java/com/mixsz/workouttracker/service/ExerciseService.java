@@ -69,6 +69,7 @@ public class ExerciseService {
         Exercise exercise = new Exercise();
         exercise.setName(exerciseRequestDTO.name().trim());
         exercise.setMuscleGroup(exerciseRequestDTO.muscleGroup());
+        exercise.setDescription(exerciseRequestDTO.description().trim());
         return exerciseRepository.save(exercise);
     }
 
@@ -78,6 +79,7 @@ public class ExerciseService {
         Exercise exercise = this.findById(id);
         exercise.setName(exerciseRequestDTO.name().trim());
         exercise.setMuscleGroup(exerciseRequestDTO.muscleGroup());
+        exercise.setDescription(exerciseRequestDTO.description().trim());
         return exerciseRepository.save(exercise);
     }
 
@@ -107,6 +109,7 @@ public class ExerciseService {
                 Exercise exercise = new Exercise();
                 exercise.setName(dto.name());
                 exercise.setMuscleGroup(MuscleGroup.valueOf(dto.muscle().toUpperCase().replace(" ", "_")));
+                exercise.setDescription(dto.instructions() != null ? dto.instructions() : "");
                 exerciseRepository.save(exercise);
             }
         }

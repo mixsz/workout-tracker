@@ -29,7 +29,7 @@ public class ExerciseController {
 
         List<ExerciseResponseDTO> exercises = exerciseService.search(name, muscleGroup)
                 .stream()
-                .map(e -> new ExerciseResponseDTO(e.getId(), e.getName(), e.getMuscleGroup()))
+                .map(e -> new ExerciseResponseDTO(e.getId(), e.getName(), e.getMuscleGroup(), e.getDescription()))
                 .toList();
         return ResponseEntity.ok(exercises);
     }
@@ -37,14 +37,16 @@ public class ExerciseController {
     @GetMapping("/{id}")
     public ResponseEntity<ExerciseResponseDTO> getById(@PathVariable UUID id) {
         Exercise exercise = exerciseService.findById(id);
-        return ResponseEntity.ok(new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup()));
+        return ResponseEntity.ok(new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup(),
+                exercise.getDescription()));
     }
 
     @PostMapping
     public ResponseEntity<ExerciseResponseDTO> save(@RequestBody @Valid ExerciseRequestDTO exerciseRequestDTO){
         Exercise exercise = exerciseService.save(exerciseRequestDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup())
+                new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup(),
+                        exercise.getDescription())
         );
     }
 
@@ -52,7 +54,8 @@ public class ExerciseController {
     public ResponseEntity<ExerciseResponseDTO> update(@PathVariable UUID id,
                                                       @RequestBody @Valid ExerciseRequestDTO exerciseRequestDTO) {
         Exercise exercise = exerciseService.update(id, exerciseRequestDTO);
-        return ResponseEntity.ok(new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup()));
+        return ResponseEntity.ok(new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup(),
+                exercise.getDescription()));
     }
 
     @DeleteMapping("/{id}")
