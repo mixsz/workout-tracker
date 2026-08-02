@@ -1,5 +1,6 @@
 package com.mixsz.workouttracker.service;
 
+import com.mixsz.workouttracker.exception.custom.BusinessException;
 import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.model.Workout;
@@ -65,6 +66,10 @@ public class WorkoutLogService {
     public WorkoutLog addWorkoutLog(UUID workoutId, User user) {
         Workout workout = workoutRepository.findByIdAndUser(workoutId, user)
                 .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
+
+        if (workout.getWorkoutExercises().isEmpty()) {
+            throw new BusinessException("Treino sem exercícios cadastrados!");
+        }
 
         WorkoutLog workoutLog = new WorkoutLog();
         workoutLog.setWorkout(workout);
