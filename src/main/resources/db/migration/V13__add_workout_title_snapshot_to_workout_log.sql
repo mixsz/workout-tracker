@@ -1,0 +1,1 @@
+ALTER TABLE workout_log ADD COLUMN workout_title_snapshot VARCHAR(100);

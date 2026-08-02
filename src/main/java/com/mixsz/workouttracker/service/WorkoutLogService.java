@@ -68,6 +68,7 @@ public class WorkoutLogService {
 
         WorkoutLog workoutLog = new WorkoutLog();
         workoutLog.setWorkout(workout);
+        workoutLog.setWorkoutTitleSnapshot(workout.getTitle());
         workoutLog.setUser(user);
         workoutLog.setDate(LocalDateTime.now());
 

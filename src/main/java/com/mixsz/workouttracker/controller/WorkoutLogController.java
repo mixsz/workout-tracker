@@ -28,8 +28,8 @@ public class WorkoutLogController {
                 .stream()
                 .map(log -> new WorkoutLogResponseDTO(
                         log.getId(),
-                        log.getWorkout().getId(),
-                        log.getWorkout().getTitle(),
+                        log.getWorkout() != null ? log.getWorkout().getId() : null,
+                        log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
                         log.getDate()
                 ))
                 .toList();
@@ -60,8 +60,8 @@ public class WorkoutLogController {
                 .stream()
                 .map(log -> new WorkoutLogResponseDTO(
                         log.getId(),
-                        log.getWorkout().getId(),
-                        log.getWorkout().getTitle(),
+                        log.getWorkout() != null ? log.getWorkout().getId() : null,
+                        log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
                         log.getDate()
                 ))
                 .toList();
@@ -78,8 +78,8 @@ public class WorkoutLogController {
                 .stream()
                 .map(log -> new WorkoutLogResponseDTO(
                         log.getId(),
-                        log.getWorkout().getId(),
-                        log.getWorkout().getTitle(),
+                        log.getWorkout() != null ? log.getWorkout().getId() : null,
+                        log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
                         log.getDate()
                 ))
                 .toList();
@@ -97,8 +97,8 @@ public class WorkoutLogController {
                 .stream()
                 .map(log -> new WorkoutLogResponseDTO(
                         log.getId(),
-                        log.getWorkout().getId(),
-                        log.getWorkout().getTitle(),
+                        log.getWorkout() != null ? log.getWorkout().getId() : null,
+                        log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
                         log.getDate()
                 ))
                 .toList();
@@ -112,8 +112,8 @@ public class WorkoutLogController {
         var workoutLog = workoutLogService.addWorkoutLog(workoutId, user);
         WorkoutLogResponseDTO workoutLogResponse = new WorkoutLogResponseDTO(
                 workoutLog.getId(),
-                workoutLog.getWorkout().getId(),
-                workoutLog.getWorkout().getTitle(),
+                workoutLog.getWorkout() != null ? workoutLog.getWorkout().getId() : null,
+                workoutLog.getWorkout() != null ? workoutLog.getWorkout().getTitle() : workoutLog.getWorkoutTitleSnapshot(),
                 workoutLog.getDate()
         );
 

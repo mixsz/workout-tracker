@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers(HttpMethod.POST, "/exercise/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/exercise/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/exercise/**").hasRole("ADMIN")
