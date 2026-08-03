@@ -52,13 +52,16 @@ public class WorkoutService {
 
     @Transactional
     public Workout update(UUID id, WorkoutRequestDTO dto, User user){
-        if(workoutRepository.findByTitleAndUser(dto.title().trim(), user).isPresent()){
-            throw new BusinessException("Título já está em uso!");
-        }
         Workout workout = workoutRepository.findByIdAndUser(id, user)
                 .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
-        workout.setTitle(dto.title());
-        workout.setPosition(workoutRepository.countByUser(user));
+
+        workoutRepository.findByTitleAndUser(dto.title().trim(), user)
+                .filter(existing -> !existing.getId().equals(id))
+                .ifPresent(existing -> {
+                    throw new BusinessException("Título já está em uso!");
+                });
+
+        workout.setTitle(dto.title().trim());
         return workoutRepository.save(workout);
     }
 
