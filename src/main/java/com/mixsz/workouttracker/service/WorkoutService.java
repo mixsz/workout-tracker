@@ -12,6 +12,7 @@ import com.mixsz.workouttracker.repository.WorkoutRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,6 +38,11 @@ public class WorkoutService {
                 .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
     }
 
+    public LocalDateTime getLastTrainedAt(Workout workout) {
+        return workoutLogRepository.findTopByWorkoutOrderByDateDesc(workout)
+                .map(WorkoutLog::getDate)
+                .orElse(null);
+    }
 
     @Transactional
     public Workout save(WorkoutRequestDTO dto, User user){

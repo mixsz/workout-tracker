@@ -30,7 +30,7 @@ public class WorkoutController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<WorkoutResponseDTO> workouts = workoutService.findAll(user)
                 .stream()
-                .map(w -> new WorkoutResponseDTO(w.getId(), w.getTitle(), w.getPosition()))
+                .map(w -> new WorkoutResponseDTO(w.getId(), w.getTitle(), w.getPosition(), workoutService.getLastTrainedAt(w)))
                 .toList();
         return ResponseEntity.ok(workouts);
     }
@@ -39,7 +39,7 @@ public class WorkoutController {
     public ResponseEntity<WorkoutResponseDTO> getById(@PathVariable UUID id){
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Workout workout = workoutService.findById(id, user);
-        return ResponseEntity.ok(new WorkoutResponseDTO(workout.getId(), workout.getTitle(), workout.getPosition()));
+        return ResponseEntity.ok(new WorkoutResponseDTO(workout.getId(), workout.getTitle(), workout.getPosition(), null));
     }
 
     @PostMapping
@@ -47,7 +47,7 @@ public class WorkoutController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Workout workout = workoutService.save(workoutRequestDTO, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(
-                new WorkoutResponseDTO(workout.getId(), workout.getTitle(), workout.getPosition()));
+                new WorkoutResponseDTO(workout.getId(), workout.getTitle(), workout.getPosition(), null));
     }
 
     @PutMapping("/{id}")
@@ -55,7 +55,7 @@ public class WorkoutController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Workout workout = workoutService.update(id, dto, user);
         return ResponseEntity.ok(
-                new WorkoutResponseDTO(workout.getId(), workout.getTitle(), workout.getPosition()));
+                new WorkoutResponseDTO(workout.getId(), workout.getTitle(), workout.getPosition(), null));
     }
 
     @PutMapping("/reorder")
@@ -63,7 +63,7 @@ public class WorkoutController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<Workout> workouts = workoutService.reorderWorkouts(dto, user);
         List<WorkoutResponseDTO> response = workouts.stream()
-                .map(w -> new WorkoutResponseDTO(w.getId(), w.getTitle(), w.getPosition()))
+                .map(w -> new WorkoutResponseDTO(w.getId(), w.getTitle(), w.getPosition(), workoutService.getLastTrainedAt(w)))
                 .toList();
         return ResponseEntity.ok(response);
     }
