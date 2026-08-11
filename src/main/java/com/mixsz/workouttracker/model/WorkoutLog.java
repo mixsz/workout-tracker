@@ -25,6 +25,8 @@ public class WorkoutLog {
 
     private String workoutTitleSnapshot;
 
+    private LocalDateTime finishedAt;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

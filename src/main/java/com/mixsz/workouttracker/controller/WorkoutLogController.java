@@ -2,6 +2,7 @@ package com.mixsz.workouttracker.controller;
 
 import com.mixsz.workouttracker.dto.response.WorkoutLogResponseDTO;
 import com.mixsz.workouttracker.model.User;
+import com.mixsz.workouttracker.model.WorkoutLog;
 import com.mixsz.workouttracker.service.WorkoutLogService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -126,4 +127,29 @@ public class WorkoutLogController {
         workoutLogService.deleteWorkoutLog(workoutLogId, user);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/active")
+    public ResponseEntity<WorkoutLogResponseDTO> getActiveWorkoutLog() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        WorkoutLog log = workoutLogService.findActive(user);
+        if (log == null) return ResponseEntity.noContent().build(); // 204, "não tem nenhum"
+        return ResponseEntity.ok(new WorkoutLogResponseDTO(
+                log.getId(),
+                log.getWorkout() != null ? log.getWorkout().getId() : null,
+                log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
+                log.getDate()
+        ));
+    }
+
+    @PatchMapping("/{workoutLogId}/finish")
+    public ResponseEntity<WorkoutLogResponseDTO> finishWorkoutLog(@PathVariable UUID workoutLogId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        WorkoutLog log = workoutLogService.finishWorkoutLog(workoutLogId, user);
+        return ResponseEntity.ok(new WorkoutLogResponseDTO(
+                log.getId(), log.getWorkout() != null ? log.getWorkout().getId() : null,
+                log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
+                log.getDate()
+        ));
+    }
+
 }

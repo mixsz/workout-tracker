@@ -62,8 +62,24 @@ public class WorkoutLogService {
                 end.atTime(23,59,59));
     }
 
+    public WorkoutLog findActive(User user) {
+        return workoutLogRepository.findByUserAndFinishedAtIsNull(user).orElse(null);
+    }
+
+    @Transactional
+    public WorkoutLog finishWorkoutLog(UUID workoutLogId, User user) {
+        WorkoutLog log = workoutLogRepository.findByIdAndUser(workoutLogId, user)
+                .orElseThrow(() -> new ResourceNotFoundException("Registro não encontrado!"));
+        log.setFinishedAt(LocalDateTime.now());
+        return workoutLogRepository.save(log);
+    }
+
     @Transactional
     public WorkoutLog addWorkoutLog(UUID workoutId, User user) {
+        if (workoutLogRepository.findByUserAndFinishedAtIsNull(user).isPresent()) {
+            throw new BusinessException("Você já tem um treino em andamento!");
+        }
+
         Workout workout = workoutRepository.findByIdAndUser(workoutId, user)
                 .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
 
