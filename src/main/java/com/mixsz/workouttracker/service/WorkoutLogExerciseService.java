@@ -1,7 +1,6 @@
 package com.mixsz.workouttracker.service;
 
 import com.mixsz.workouttracker.dto.request.WorkoutLogExerciseRequestDTO;
-import com.mixsz.workouttracker.exception.custom.BusinessException;
 import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.*;
 import com.mixsz.workouttracker.repository.ExerciseRepository;
@@ -61,11 +60,10 @@ public class WorkoutLogExerciseService {
         Exercise exercise = exerciseRepository.findById(dto.exerciseId())
                 .orElseThrow(() -> new ResourceNotFoundException("Exercício não encontrado!"));
 
-        if(workoutLogExerciseRepository.findByWorkoutLogIdAndExerciseId(workoutLogId, dto.exerciseId()).isPresent()){
-            throw new BusinessException("Exercício já registrado!");
-        }
+        WorkoutLogExercise workoutLogExercise = workoutLogExerciseRepository
+                .findByWorkoutLogIdAndExerciseId(workoutLogId, dto.exerciseId())
+                .orElse(new WorkoutLogExercise());
 
-        WorkoutLogExercise workoutLogExercise = new WorkoutLogExercise();
         workoutLogExercise.setExercise(exercise);
         workoutLogExercise.setWorkoutLog(workoutLog);
         workoutLogExercise.setDone(dto.done());

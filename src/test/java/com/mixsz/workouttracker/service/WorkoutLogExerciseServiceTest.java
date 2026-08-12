@@ -1,7 +1,6 @@
 package com.mixsz.workouttracker.service;
 
 import com.mixsz.workouttracker.dto.request.WorkoutLogExerciseRequestDTO;
-import com.mixsz.workouttracker.exception.custom.BusinessException;
 import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.*;
 import com.mixsz.workouttracker.repository.ExerciseRepository;
@@ -18,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
@@ -102,7 +102,7 @@ public class WorkoutLogExerciseServiceTest {
     }
 
     @Test
-    void lancaErroQuandoExercicioJaFoiRegistrado(){
+    void atualizaQuandoExercicioJaFoiRegistrado(){
         UUID workoutLogId = UUID.randomUUID();
         UUID workoutId = UUID.randomUUID();
         UUID exerciseId = UUID.randomUUID();
@@ -115,11 +115,21 @@ public class WorkoutLogExerciseServiceTest {
         WorkoutLog workoutLog = new WorkoutLog();
         workoutLog.setWorkout(workout);
 
-        Mockito.when(workoutLogRepository.findByIdAndUser(workoutLogId, user)).thenReturn(Optional.of(workoutLog));
-        Mockito.when(workoutExerciseRepository.findByWorkoutIdAndExerciseId(workoutId, exerciseId)).thenReturn(Optional.of(new WorkoutExercise()));
-        Mockito.when(exerciseRepository.findById(exerciseId)).thenReturn(Optional.of(new Exercise()));
-        Mockito.when(workoutLogExerciseRepository.findByWorkoutLogIdAndExerciseId(workoutLogId, exerciseId)).thenReturn(Optional.of(new WorkoutLogExercise()));
+        WorkoutExercise workoutExercise = new WorkoutExercise();
+        workoutExercise.setPosition(1);
 
-        assertThrows(BusinessException.class, () -> workoutLogExerciseService.addExercise(workoutLogId, dto, user));
+        WorkoutLogExercise existente = new WorkoutLogExercise();
+
+        Mockito.when(workoutLogRepository.findByIdAndUser(workoutLogId, user)).thenReturn(Optional.of(workoutLog));
+        Mockito.when(workoutExerciseRepository.findByWorkoutIdAndExerciseId(workoutId, exerciseId)).thenReturn(Optional.of(workoutExercise));
+        Mockito.when(exerciseRepository.findById(exerciseId)).thenReturn(Optional.of(new Exercise()));
+        Mockito.when(workoutLogExerciseRepository.findByWorkoutLogIdAndExerciseId(workoutLogId, exerciseId)).thenReturn(Optional.of(existente));
+        Mockito.when(workoutLogExerciseRepository.save(Mockito.any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        WorkoutLogExercise resultado = workoutLogExerciseService.addExercise(workoutLogId, dto, user);
+
+        assertEquals(existente, resultado);
+        assertEquals(true, resultado.isDone());
+        assertEquals(10, resultado.getRepsDone());
     }
 }
