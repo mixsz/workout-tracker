@@ -27,7 +27,7 @@ public class WorkoutLogService {
     }
 
     public List<WorkoutLog> findAll(User user){
-        return workoutLogRepository.findByUserOrderByDateDesc(user);
+        return workoutLogRepository.findByUserAndFinishedAtIsNotNullOrderByDateDesc(user);
     }
 
     public List<WorkoutLog> findByWorkout(UUID workoutId, User user){
@@ -38,14 +38,14 @@ public class WorkoutLogService {
     }
 
     public List<WorkoutLog> findByDate(LocalDate date, User user) {
-        return workoutLogRepository.findByUserAndDateBetweenOrderByDateDesc(
+        return workoutLogRepository.findByUserAndDateBetweenAndFinishedAtIsNotNullOrderByDateDesc(
                 user,
                 date.atStartOfDay(),
                 date.atTime(23, 59, 59));
     }
 
     public List<WorkoutLog> findByDateBetween(LocalDate start, LocalDate end, User user) {
-        return workoutLogRepository.findByUserAndDateBetweenOrderByDateDesc(
+        return workoutLogRepository.findByUserAndDateBetweenAndFinishedAtIsNotNullOrderByDateDesc(
                 user,
                 start.atStartOfDay(),
                 end.atTime(23,59,59));

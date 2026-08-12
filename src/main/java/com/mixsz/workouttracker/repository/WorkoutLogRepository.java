@@ -15,8 +15,6 @@ import java.util.UUID;
 public interface WorkoutLogRepository extends JpaRepository<WorkoutLog, UUID> {
     List<WorkoutLog> findByWorkoutAndUserOrderByDateDesc(Workout workout, User user);
     Optional<WorkoutLog> findByIdAndUser(UUID id, User user);
-    List<WorkoutLog> findByUserAndDateBetweenOrderByDateDesc(User user, LocalDateTime start, LocalDateTime end);
-    List<WorkoutLog> findByUserOrderByDateDesc(User user);
     List<WorkoutLog> findByWorkoutAndUserAndDateBetweenOrderByDateDesc(Workout workout,
                                                                        User user,
                                                                        LocalDateTime start,
@@ -24,4 +22,6 @@ public interface WorkoutLogRepository extends JpaRepository<WorkoutLog, UUID> {
     List<WorkoutLog> findByWorkout(Workout workout);
     Optional<WorkoutLog> findTopByWorkoutOrderByDateDesc(Workout workout);
     Optional<WorkoutLog> findByUserAndFinishedAtIsNull(User user);
+    List<WorkoutLog> findByUserAndDateBetweenAndFinishedAtIsNotNullOrderByDateDesc(User user, LocalDateTime start, LocalDateTime end);
+    List<WorkoutLog> findByUserAndFinishedAtIsNotNullOrderByDateDesc(User user);
 }
