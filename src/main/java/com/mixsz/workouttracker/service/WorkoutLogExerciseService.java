@@ -55,7 +55,7 @@ public class WorkoutLogExerciseService {
                 .orElseThrow(() -> new ResourceNotFoundException("Registro de treino não encontrado!"));
 
         WorkoutExercise workoutExercise = workoutExerciseRepository.findByWorkoutIdAndExerciseId(workoutLog.getWorkout().getId(),
-                                                                                                dto.exerciseId())
+                        dto.exerciseId())
                 .orElseThrow(() -> new ResourceNotFoundException("Exercício não pertence a esse treino!"));
 
         Exercise exercise = exerciseRepository.findById(dto.exerciseId())
@@ -68,20 +68,37 @@ public class WorkoutLogExerciseService {
         WorkoutLogExercise workoutLogExercise = new WorkoutLogExercise();
         workoutLogExercise.setExercise(exercise);
         workoutLogExercise.setWorkoutLog(workoutLog);
-        workoutLogExercise.setRepsDone(dto.repsDone());
-        workoutLogExercise.setSetsDone(dto.setsDone());
-        workoutLogExercise.setWeightDone(dto.weightDone());
+        workoutLogExercise.setDone(dto.done());
+
+        if (dto.done()) {
+            workoutLogExercise.setRepsDone(dto.repsDone());
+            workoutLogExercise.setSetsDone(dto.setsDone());
+            workoutLogExercise.setWeightDone(dto.weightDone());
+        } else {
+            workoutLogExercise.setRepsDone(null);
+            workoutLogExercise.setSetsDone(null);
+            workoutLogExercise.setWeightDone(null);
+        }
+
         workoutLogExercise.setPosition(workoutExercise.getPosition());
         return workoutLogExerciseRepository.save(workoutLogExercise);
     }
 
     @Transactional
-    public WorkoutLogExercise update(WorkoutLogExerciseRequestDTO dto, UUID workoutLogId,  UUID exerciseId, User user){
+    public WorkoutLogExercise update(WorkoutLogExerciseRequestDTO dto, UUID workoutLogId, UUID exerciseId, User user){
         WorkoutLogExercise workoutLogExercise = findById(workoutLogId, exerciseId, user);
 
-        workoutLogExercise.setRepsDone(dto.repsDone());
-        workoutLogExercise.setSetsDone(dto.setsDone());
-        workoutLogExercise.setWeightDone(dto.weightDone());
+        workoutLogExercise.setDone(dto.done());
+
+        if (dto.done()) {
+            workoutLogExercise.setRepsDone(dto.repsDone());
+            workoutLogExercise.setSetsDone(dto.setsDone());
+            workoutLogExercise.setWeightDone(dto.weightDone());
+        } else {
+            workoutLogExercise.setRepsDone(null);
+            workoutLogExercise.setSetsDone(null);
+            workoutLogExercise.setWeightDone(null);
+        }
 
         return workoutLogExerciseRepository.save(workoutLogExercise);
     }

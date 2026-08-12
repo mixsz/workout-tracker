@@ -65,7 +65,7 @@ public class WorkoutLogExerciseServiceTest {
         UUID workoutLogId = UUID.randomUUID();
         UUID workoutId = UUID.randomUUID();
         UUID exerciseId = UUID.randomUUID();
-        WorkoutLogExerciseRequestDTO dto = new WorkoutLogExerciseRequestDTO(exerciseId, 453.5, 10, 10);
+        WorkoutLogExerciseRequestDTO dto = new WorkoutLogExerciseRequestDTO(exerciseId, true, 453.5, 10, 10);
         User user = new User();
 
         Workout workout = new Workout();
@@ -85,7 +85,7 @@ public class WorkoutLogExerciseServiceTest {
         UUID workoutLogId = UUID.randomUUID();
         UUID workoutId = UUID.randomUUID();
         UUID exerciseId = UUID.randomUUID();
-        WorkoutLogExerciseRequestDTO dto = new WorkoutLogExerciseRequestDTO(exerciseId, 453.5, 10, 10);
+        WorkoutLogExerciseRequestDTO dto = new WorkoutLogExerciseRequestDTO(exerciseId, true, 453.5, 10, 10);
         User user = new User();
 
         Workout workout = new Workout();
@@ -106,7 +106,7 @@ public class WorkoutLogExerciseServiceTest {
         UUID workoutLogId = UUID.randomUUID();
         UUID workoutId = UUID.randomUUID();
         UUID exerciseId = UUID.randomUUID();
-        WorkoutLogExerciseRequestDTO dto = new WorkoutLogExerciseRequestDTO(exerciseId, 453.5, 10, 10);
+        WorkoutLogExerciseRequestDTO dto = new WorkoutLogExerciseRequestDTO(exerciseId, true, 453.5, 10, 10);
         User user = new User();
 
         Workout workout = new Workout();

@@ -34,6 +34,7 @@ public class WorkoutLogExerciseController {
                         e.getId(),
                         new ExerciseResponseDTO(e.getExercise().getId(), e.getExercise().getName(),
                                 e.getExercise().getMuscleGroup(),e.getExercise().getDescription()),
+                        e.isDone(),
                         e.getWeightDone(),
                         e.getSetsDone(),
                         e.getRepsDone(),
@@ -53,6 +54,7 @@ public class WorkoutLogExerciseController {
                 new ExerciseResponseDTO(workoutLogExercise.getExercise().getId(),
                         workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup(),
                         workoutLogExercise.getExercise().getDescription()),
+                workoutLogExercise.isDone(),
                 workoutLogExercise.getWeightDone(),
                 workoutLogExercise.getSetsDone(),
                 workoutLogExercise.getRepsDone(),
@@ -63,7 +65,7 @@ public class WorkoutLogExerciseController {
 
     @PostMapping("/{workoutLogId}")
     public ResponseEntity<WorkoutLogExerciseResponseDTO> addWorkoutLogExercise(@PathVariable UUID workoutLogId,
-                                                               @RequestBody @Valid WorkoutLogExerciseRequestDTO dto) {
+                                                                               @RequestBody @Valid WorkoutLogExerciseRequestDTO dto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         WorkoutLogExercise workoutLogExercise = workoutLogExerciseService.addExercise(workoutLogId, dto, user);
         WorkoutLogExerciseResponseDTO response = new WorkoutLogExerciseResponseDTO(
@@ -71,6 +73,7 @@ public class WorkoutLogExerciseController {
                 new ExerciseResponseDTO(workoutLogExercise.getExercise().getId(),
                         workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup(),
                         workoutLogExercise.getExercise().getDescription()),
+                workoutLogExercise.isDone(),
                 workoutLogExercise.getWeightDone(),
                 workoutLogExercise.getSetsDone(),
                 workoutLogExercise.getRepsDone(),
@@ -81,8 +84,8 @@ public class WorkoutLogExerciseController {
 
     @PatchMapping("/{workoutLogId}/{exerciseId}")
     public ResponseEntity<WorkoutLogExerciseResponseDTO> updateWorkoutLogExercise(@PathVariable UUID workoutLogId,
-                                                                             @PathVariable UUID exerciseId,
-                                                                             @RequestBody @Valid WorkoutLogExerciseRequestDTO dto) {
+                                                                                  @PathVariable UUID exerciseId,
+                                                                                  @RequestBody @Valid WorkoutLogExerciseRequestDTO dto) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         WorkoutLogExercise workoutLogExercise = workoutLogExerciseService.update(dto, workoutLogId, exerciseId, user);
         WorkoutLogExerciseResponseDTO response = new WorkoutLogExerciseResponseDTO(
@@ -90,6 +93,7 @@ public class WorkoutLogExerciseController {
                 new ExerciseResponseDTO(workoutLogExercise.getExercise().getId(),
                         workoutLogExercise.getExercise().getName(), workoutLogExercise.getExercise().getMuscleGroup(),
                         workoutLogExercise.getExercise().getDescription()),
+                workoutLogExercise.isDone(),
                 workoutLogExercise.getWeightDone(),
                 workoutLogExercise.getSetsDone(),
                 workoutLogExercise.getRepsDone(),
@@ -99,8 +103,7 @@ public class WorkoutLogExerciseController {
     }
 
     @DeleteMapping("/{workoutLogId}/{exerciseId}")
-    public ResponseEntity<Void> deleteWorkoutLogExercise(@PathVariable UUID workoutLogId,
-                                                        @PathVariable UUID exerciseId) {
+    public ResponseEntity<Void> deleteWorkoutLogExercise(@PathVariable UUID workoutLogId, @PathVariable UUID exerciseId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         workoutLogExerciseService.delete(workoutLogId, exerciseId, user);
         return ResponseEntity.noContent().build();

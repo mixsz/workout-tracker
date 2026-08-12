@@ -20,11 +20,13 @@ public class WorkoutLogExercise {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.UUID)
     private UUID id;
 
-    private double weightDone;
+    private Double weightDone;
 
-    private int setsDone;
+    private Integer setsDone;
 
-    private int repsDone;
+    private Integer repsDone;
+
+    private boolean done;
 
     private int position;
 

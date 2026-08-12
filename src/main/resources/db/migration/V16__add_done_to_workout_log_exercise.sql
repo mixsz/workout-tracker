@@ -1,0 +1,5 @@
+ALTER TABLE workout_log_exercise
+    ADD COLUMN done BOOLEAN NOT NULL DEFAULT false,
+ALTER COLUMN sets_done DROP NOT NULL,
+    ALTER COLUMN reps_done DROP NOT NULL,
+    ALTER COLUMN weight_done DROP NOT NULL;
