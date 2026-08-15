@@ -31,7 +31,8 @@ public class WorkoutLogController {
                         log.getId(),
                         log.getWorkout() != null ? log.getWorkout().getId() : null,
                         log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
-                        log.getDate()
+                        log.getDate(),
+                        log.getFinishedAt()
                 ))
                 .toList();
 
@@ -47,7 +48,8 @@ public class WorkoutLogController {
                         log.getId(),
                         log.getWorkout().getId(),
                         log.getWorkout().getTitle(),
-                        log.getDate()
+                        log.getDate(),
+                        log.getFinishedAt()
                 ))
                 .toList();
 
@@ -63,7 +65,8 @@ public class WorkoutLogController {
                         log.getId(),
                         log.getWorkout() != null ? log.getWorkout().getId() : null,
                         log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
-                        log.getDate()
+                        log.getDate(),
+                        log.getFinishedAt()
                 ))
                 .toList();
 
@@ -81,7 +84,8 @@ public class WorkoutLogController {
                         log.getId(),
                         log.getWorkout() != null ? log.getWorkout().getId() : null,
                         log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
-                        log.getDate()
+                        log.getDate(),
+                        log.getFinishedAt()
                 ))
                 .toList();
 
@@ -100,7 +104,8 @@ public class WorkoutLogController {
                         log.getId(),
                         log.getWorkout() != null ? log.getWorkout().getId() : null,
                         log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
-                        log.getDate()
+                        log.getDate(),
+                        log.getFinishedAt()
                 ))
                 .toList();
 
@@ -115,7 +120,8 @@ public class WorkoutLogController {
                 workoutLog.getId(),
                 workoutLog.getWorkout() != null ? workoutLog.getWorkout().getId() : null,
                 workoutLog.getWorkout() != null ? workoutLog.getWorkout().getTitle() : workoutLog.getWorkoutTitleSnapshot(),
-                workoutLog.getDate()
+                workoutLog.getDate(),
+                workoutLog.getFinishedAt()
         );
 
         return ResponseEntity.status(org.springframework.http.HttpStatus.CREATED).body(workoutLogResponse);
@@ -137,7 +143,8 @@ public class WorkoutLogController {
                 log.getId(),
                 log.getWorkout() != null ? log.getWorkout().getId() : null,
                 log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
-                log.getDate()
+                log.getDate(),
+                log.getFinishedAt()
         ));
     }
 
@@ -148,7 +155,8 @@ public class WorkoutLogController {
         return ResponseEntity.ok(new WorkoutLogResponseDTO(
                 log.getId(), log.getWorkout() != null ? log.getWorkout().getId() : null,
                 log.getWorkout() != null ? log.getWorkout().getTitle() : log.getWorkoutTitleSnapshot(),
-                log.getDate()
+                log.getDate(),
+                log.getFinishedAt()
         ));
     }
 
