@@ -1,6 +1,7 @@
 package com.mixsz.workouttracker.controller;
 
 import com.mixsz.workouttracker.dto.response.WorkoutLogResponseDTO;
+import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.model.WorkoutLog;
 import com.mixsz.workouttracker.service.WorkoutLogService;
@@ -37,6 +38,22 @@ public class WorkoutLogController {
                 .toList();
 
         return ResponseEntity.ok(workoutLogs);
+    }
+
+    @GetMapping("/session/{workoutLogId}")
+    public ResponseEntity<WorkoutLogResponseDTO> getWorkoutLogBySession(@PathVariable UUID workoutLogId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        WorkoutLog workoutLog = workoutLogService.findById(workoutLogId, user).
+                orElseThrow(() -> new ResourceNotFoundException("Histórico de treino não encontrado!"));
+
+        WorkoutLogResponseDTO response = new WorkoutLogResponseDTO(
+                workoutLog.getId(),
+                workoutLog.getWorkout() != null ? workoutLog.getWorkout().getId() : null,
+                workoutLog.getWorkout() != null ? workoutLog.getWorkout().getTitle() : workoutLog.getWorkoutTitleSnapshot(),
+                workoutLog.getDate(),
+                workoutLog.getFinishedAt()
+        );
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{workoutId}")

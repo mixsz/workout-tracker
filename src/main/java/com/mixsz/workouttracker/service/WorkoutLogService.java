@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,6 +36,10 @@ public class WorkoutLogService {
                 .orElseThrow(() -> new ResourceNotFoundException("Treino não encontrado!"));
 
         return workoutLogRepository.findByWorkoutAndUserOrderByDateDesc(workout, user);
+    }
+
+    public Optional<WorkoutLog> findById(UUID workoutLogId, User user) {
+        return workoutLogRepository.findByIdAndUser(workoutLogId, user);
     }
 
     public List<WorkoutLog> findByDate(LocalDate date, User user) {
