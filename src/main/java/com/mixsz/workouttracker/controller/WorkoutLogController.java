@@ -1,15 +1,21 @@
 package com.mixsz.workouttracker.controller;
 
+import com.mixsz.workouttracker.dto.response.WorkoutLogHistoryResponseDTO;
 import com.mixsz.workouttracker.dto.response.WorkoutLogResponseDTO;
 import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.model.WorkoutLog;
 import com.mixsz.workouttracker.service.WorkoutLogService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +27,26 @@ public class WorkoutLogController {
 
     public WorkoutLogController(WorkoutLogService workoutLogService) {
         this.workoutLogService = workoutLogService;
+    }
+
+    @GetMapping("/history")
+    public ResponseEntity<Page<WorkoutLogHistoryResponseDTO>> getHistory(
+            @RequestParam(required = false) UUID workoutId,
+            @RequestParam(required = false) LocalDate start,
+            @RequestParam(required = false) LocalDate end,
+            @RequestParam(defaultValue = "false") boolean includeDeleted,
+            @RequestParam(defaultValue = "false") boolean onlyDeleted,
+            @PageableDefault(size = 5, sort = "date", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        LocalDateTime startDT = start != null ? start.atStartOfDay() : null;
+        LocalDateTime endDT = end != null ? end.atTime(23, 59, 59) : null;
+
+        Page<WorkoutLogHistoryResponseDTO> response = workoutLogService.searchWithCounts(
+                user, workoutId, startDT, endDT, includeDeleted, onlyDeleted, pageable);
+
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping
