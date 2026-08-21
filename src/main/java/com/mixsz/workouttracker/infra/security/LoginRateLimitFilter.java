@@ -27,7 +27,10 @@ public class LoginRateLimitFilter extends OncePerRequestFilter {
 
         if (isLoginRequest) {
             String ip = request.getRemoteAddr();
-            if (!rateLimiter.isAllowed(ip)) {
+            int remaining = rateLimiter.remainingAttempts(ip);
+            response.setHeader("X-RateLimit-Remaining", String.valueOf(Math.max(remaining, 0)));
+
+            if (remaining < 0) {
                 response.setStatus(429);
                 response.setContentType("application/json");
                 response.getWriter().write("{\"message\":\"Muitas tentativas de login. Tente novamente em instantes.\"}");
