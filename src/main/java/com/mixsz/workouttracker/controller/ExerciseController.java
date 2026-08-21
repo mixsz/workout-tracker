@@ -6,10 +6,12 @@ import com.mixsz.workouttracker.enums.MuscleGroup;
 import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.service.ExerciseService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +41,17 @@ public class ExerciseController {
         Exercise exercise = exerciseService.findById(id);
         return ResponseEntity.ok(new ExerciseResponseDTO(exercise.getId(), exercise.getName(), exercise.getMuscleGroup(),
                 exercise.getDescription()));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<ExerciseResponseDTO>> search(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) List<MuscleGroup> muscleGroups,
+            Pageable pageable) {
+
+        Page<ExerciseResponseDTO> exercises = exerciseService.search(name, muscleGroups, pageable)
+                .map(e -> new ExerciseResponseDTO(e.getId(), e.getName(), e.getMuscleGroup(), e.getDescription()));
+        return ResponseEntity.ok(exercises);
     }
 
     @PostMapping

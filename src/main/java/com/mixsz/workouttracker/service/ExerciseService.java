@@ -7,8 +7,10 @@ import com.mixsz.workouttracker.exception.custom.BusinessException;
 import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.repository.ExerciseRepository;
+import com.mixsz.workouttracker.specification.ExerciseSpecification;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -16,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,6 +60,10 @@ public class ExerciseService {
         else{
             return this.findAll();
         }
+    }
+
+    public Page<Exercise> search(String name, List<MuscleGroup> muscleGroups, Pageable pageable) {
+        return exerciseRepository.findAll(ExerciseSpecification.search(name, muscleGroups), pageable);
     }
 
 
