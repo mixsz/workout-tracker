@@ -25,9 +25,11 @@ import java.util.List;
 public class SecurityConfig {
 
     private final SecurityFilter securityFilter;
+    private final LoginRateLimitFilter loginRateLimitFilter;
 
-    public SecurityConfig(SecurityFilter securityFilter) {
+    public SecurityConfig(SecurityFilter securityFilter, LoginRateLimitFilter loginRateLimitFilter) {
         this.securityFilter = securityFilter;
+        this.loginRateLimitFilter = loginRateLimitFilter;
     }
 
     @Bean
@@ -50,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/exercise/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(loginRateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

@@ -1,0 +1,33 @@
+package com.mixsz.workouttracker.infra.security;
+
+import org.springframework.stereotype.Component;
+
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+@Component
+public class LoginRateLimiter {
+
+    private static final int MAX_ATTEMPTS = 5;
+    private static final long WINDOW_MILLIS = 60_000;
+
+    private final ConcurrentHashMap<String, Bucket> buckets = new ConcurrentHashMap<>();
+
+    public boolean isAllowed(String ip) {
+        Bucket bucket = buckets.computeIfAbsent(ip, k -> new Bucket());
+        long now = System.currentTimeMillis();
+
+        synchronized (bucket) {
+            if (now - bucket.windowStart > WINDOW_MILLIS) {
+                bucket.windowStart = now;
+                bucket.attempts.set(0);
+            }
+            return bucket.attempts.incrementAndGet() <= MAX_ATTEMPTS;
+        }
+    }
+
+    private static class Bucket {
+        long windowStart = System.currentTimeMillis();
+        AtomicInteger attempts = new AtomicInteger(0);
+    }
+}
