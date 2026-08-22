@@ -23,6 +23,8 @@ public class WorkoutService {
     private final WorkoutRepository workoutRepository;
     private final WorkoutLogRepository workoutLogRepository;
 
+    private static final int MAX_WORKOUTS = 20;
+
     public WorkoutService(WorkoutRepository workoutRepository, WorkoutLogRepository workoutLogRepository){
         this.workoutRepository = workoutRepository;
         this.workoutLogRepository = workoutLogRepository;
@@ -46,13 +48,17 @@ public class WorkoutService {
 
     @Transactional
     public Workout save(WorkoutRequestDTO dto, User user){
+        int currentCount = workoutRepository.countByUser(user);
+        if(currentCount >= MAX_WORKOUTS){
+            throw new BusinessException("Você atingiu o limite de " + MAX_WORKOUTS + " treinos!");
+        }
         if(workoutRepository.findByTitleAndUser(dto.title(),user).isPresent()){
             throw new BusinessException("Esse treino já existe!");
         }
         Workout workout = new Workout();
         workout.setTitle(dto.title().trim());
         workout.setUser(user);
-        workout.setPosition(workoutRepository.countByUser(user));
+        workout.setPosition(currentCount);
         return workoutRepository.save(workout);
     }
 
