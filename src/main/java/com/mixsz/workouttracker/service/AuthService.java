@@ -1,6 +1,7 @@
 package com.mixsz.workouttracker.service;
 
 import com.mixsz.workouttracker.dto.request.RegisterRequestDTO;
+import com.mixsz.workouttracker.enums.AvatarId;
 import com.mixsz.workouttracker.enums.UserRole;
 import com.mixsz.workouttracker.model.User;
 import com.mixsz.workouttracker.repository.UserRepository;
@@ -38,7 +39,7 @@ public class AuthService implements UserDetailsService {
             throw new BusinessException("Email já cadastrado!");
         }
         String encryptedPassword = passwordEncoder.encode(data.password());
-        User newUser = new User(null, data.name().trim(), data.email().trim(), encryptedPassword, UserRole.USER);
+        User newUser = new User(null, data.name().trim(), data.email().trim(), encryptedPassword, UserRole.USER, AvatarId.USER, null);
         return userRepository.save(newUser);
     }
 }

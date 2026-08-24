@@ -25,4 +25,5 @@ public interface WorkoutLogRepository extends JpaRepository<WorkoutLog, UUID>, J
     Optional<WorkoutLog> findByUserAndFinishedAtIsNull(User user);
     List<WorkoutLog> findByUserAndDateBetweenAndFinishedAtIsNotNullOrderByDateDesc(User user, LocalDateTime start, LocalDateTime end);
     List<WorkoutLog> findByUserAndFinishedAtIsNotNullOrderByDateDesc(User user);
+    int countByUserAndFinishedAtIsNotNull(User user);
 }

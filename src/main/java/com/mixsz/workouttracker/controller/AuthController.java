@@ -43,7 +43,7 @@ public class AuthController {
     public ResponseEntity<List<UserResponseDTO>> getAllAccounts() {
         var users = this.repository.findAll()
                 .stream()
-                .map(user -> new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getRole()))
+                .map(user -> new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getRole(), user.getAvatarId()))
                 .toList();
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
@@ -53,7 +53,7 @@ public class AuthController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return ResponseEntity.status(HttpStatus.OK).body(new UserResponseDTO(user.getId(), user.getName(),
-                user.getEmail(), user.getRole()));
+                user.getEmail(), user.getRole(), user.getAvatarId()));
     }
 
 
@@ -75,7 +75,8 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<UserResponseDTO> register(@RequestBody @Valid RegisterRequestDTO data) {
         User user = authService.register(data);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDTO(user.getId(), user.getName(), user.getEmail(), user.getRole()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDTO(user.getId(), user.getName(),
+                user.getEmail(), user.getRole(), user.getAvatarId()));
     }
 
 
