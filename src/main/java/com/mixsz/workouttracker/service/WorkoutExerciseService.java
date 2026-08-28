@@ -24,6 +24,7 @@ public class WorkoutExerciseService {
     private final WorkoutRepository workoutRepository;
     private final ExerciseRepository exerciseRepository;
     private final WorkoutExerciseRepository workoutExerciseRepository;
+    private static final int MAX_EXERCISES_PER_WORKOUT = 15;
 
     public WorkoutExerciseService(WorkoutRepository workoutRepository,
                                   ExerciseRepository exerciseRepository,
@@ -57,6 +58,11 @@ public class WorkoutExerciseService {
             throw new BusinessException("Exercício já adicionado ao treino!");
         }
 
+        int currentCount = workoutExerciseRepository.countByWorkout(workout);
+        if(currentCount >= MAX_EXERCISES_PER_WORKOUT){
+            throw new BusinessException("Este treino já atingiu o limite de " + MAX_EXERCISES_PER_WORKOUT + " exercícios!");
+        }
+
         Exercise exercise = exerciseRepository.findById(dto.exerciseId())
                 .orElseThrow(() -> new ResourceNotFoundException("Exercício não encontrado no catálogo!"));
 
@@ -65,7 +71,7 @@ public class WorkoutExerciseService {
         workoutExercise.setExercise(exercise);
         workoutExercise.setSets(dto.sets());
         workoutExercise.setReps(dto.reps());
-        workoutExercise.setPosition(workoutExerciseRepository.countByWorkout(workout));
+        workoutExercise.setPosition(currentCount);
         return workoutExerciseRepository.save(workoutExercise);
     }
 
