@@ -13,6 +13,7 @@ import com.mixsz.workouttracker.specification.ExerciseSpecification;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -57,17 +58,18 @@ public class ExerciseService {
 
 
     public List<Exercise> search(String name, MuscleGroup muscleGroup){
+        Sort sort = Sort.by("name").ascending();
         if(name != null && muscleGroup != null){
-            return exerciseRepository.findByNameAndMuscleGroup(name, muscleGroup);
+            return exerciseRepository.findByNameAndMuscleGroup(name, muscleGroup, sort);
         }
         else if(name != null){
-            return exerciseRepository.findByNameContainingIgnoreCase(name);
+            return exerciseRepository.findByNameContainingIgnoreCase(name, sort);
         }
         else if(muscleGroup != null){
-            return exerciseRepository.findByMuscleGroup(muscleGroup);
+            return exerciseRepository.findByMuscleGroup(muscleGroup, sort);
         }
         else{
-            return this.findAll();
+            return exerciseRepository.findAll(sort);
         }
     }
 

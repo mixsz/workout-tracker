@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
@@ -54,9 +55,10 @@ public class ExerciseServiceTest {
     void retornoPorNomeEMusculo(){
         String name = "Nome";
         MuscleGroup muscleGroup = MuscleGroup.CHEST;
+        Sort sort = Sort.by("name").ascending();
         List<Exercise> exercises = List.of(new Exercise());
 
-        Mockito.when(exerciseRepository.findByNameAndMuscleGroup(name, muscleGroup)).thenReturn(exercises);
+        Mockito.when(exerciseRepository.findByNameAndMuscleGroup(name, muscleGroup, sort)).thenReturn(exercises);
 
         List<Exercise> res = exerciseService.search(name, muscleGroup);
 
@@ -66,12 +68,12 @@ public class ExerciseServiceTest {
     @Test
     void retornoPorNome(){
         String name = "Nome";
+        Sort sort = Sort.by("name").ascending();
         List<Exercise> exercises = List.of(new Exercise());
 
-        Mockito.when(exerciseRepository.findByNameContainingIgnoreCase(name)).thenReturn(exercises);
+        Mockito.when(exerciseRepository.findByNameContainingIgnoreCase(name, sort)).thenReturn(exercises);
 
         List<Exercise> res = exerciseService.search(name, null);
-
 
         assertEquals(exercises, res);
     }
@@ -79,21 +81,22 @@ public class ExerciseServiceTest {
     @Test
     void retornoPorExercicio(){
         MuscleGroup muscleGroup = MuscleGroup.CHEST;
+        Sort sort = Sort.by("name").ascending();
         List<Exercise> exercises = List.of(new Exercise());
 
-        Mockito.when(exerciseRepository.findByMuscleGroup(muscleGroup)).thenReturn(exercises);
+        Mockito.when(exerciseRepository.findByMuscleGroup(muscleGroup, sort)).thenReturn(exercises);
 
         List<Exercise> res = exerciseService.search(null, muscleGroup);
-
 
         assertEquals(exercises, res);
     }
 
     @Test
     void retornaTodosExerciciosQuandoNenhumFiltro(){
+        Sort sort = Sort.by("name").ascending();
         List<Exercise> exercises = List.of(new Exercise());
 
-        Mockito.when(exerciseRepository.findAll()).thenReturn(exercises);
+        Mockito.when(exerciseRepository.findAll(sort)).thenReturn(exercises);
 
         List<Exercise> res = exerciseService.search(null, null);
 
