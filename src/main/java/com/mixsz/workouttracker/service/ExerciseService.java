@@ -79,7 +79,7 @@ public class ExerciseService {
     @Transactional
     public Exercise save(ExerciseRequestDTO exerciseRequestDTO){
 
-        if(exerciseRepository.findByName(exerciseRequestDTO.name().trim()).isPresent()) {
+        if (exerciseRepository.existsByNameIgnoreCase(exerciseRequestDTO.name().trim())) {
             throw new BusinessException("Exercício já cadastrado!");
         }
         Exercise exercise = new Exercise();
@@ -93,7 +93,13 @@ public class ExerciseService {
     @Transactional
     public Exercise update(UUID id, ExerciseRequestDTO exerciseRequestDTO){
         Exercise exercise = this.findById(id);
-        exercise.setName(exerciseRequestDTO.name().trim());
+
+        String newName = exerciseRequestDTO.name().trim();
+        if (exerciseRepository.existsByNameIgnoreCaseAndIdNot(newName, id)) {
+            throw new BusinessException("Exercício já cadastrado!");
+        }
+
+        exercise.setName(newName);
         exercise.setMuscleGroup(exerciseRequestDTO.muscleGroup());
         exercise.setDescription(exerciseRequestDTO.description().trim());
         return exerciseRepository.save(exercise);
@@ -125,9 +131,10 @@ public class ExerciseService {
         );
 
         for (NinjaExerciseDTO dto : response.getBody()) {
-            if (exerciseRepository.findByName(dto.name()).isEmpty()) {
+            String name = dto.name().trim();
+            if (!exerciseRepository.existsByNameIgnoreCase(name)) {
                 Exercise exercise = new Exercise();
-                exercise.setName(dto.name());
+                exercise.setName(name);
                 exercise.setMuscleGroup(MuscleGroup.valueOf(dto.muscle().toUpperCase().replace(" ", "_")));
                 exercise.setDescription(dto.instructions() != null ? dto.instructions() : "");
                 exerciseRepository.save(exercise);

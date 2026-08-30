@@ -15,6 +15,8 @@ import java.util.UUID;
 @Repository
 public interface ExerciseRepository extends JpaRepository<Exercise, UUID>, JpaSpecificationExecutor<Exercise> {
     Optional<Exercise> findByName(String name);
+    boolean existsByNameIgnoreCase(String name);
+    boolean existsByNameIgnoreCaseAndIdNot(String name, UUID id);
     List<Exercise> findByNameContainingIgnoreCase(String name);
     List<Exercise> findByMuscleGroup(MuscleGroup muscleGroup);
 
