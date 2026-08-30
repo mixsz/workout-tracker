@@ -105,7 +105,7 @@ public class ExerciseService {
         Exercise exercise = this.findById(id);
         if (workoutExerciseRepository.existsByExercise(exercise)
                 || workoutLogExerciseRepository.existsByExercise(exercise)) {
-            throw new BusinessException("Este exercício está em uso em treinos ou no histórico e não pode ser excluído.");
+            throw new BusinessException("Este exercício está vinculado a um treino ou histórico de treino.");
         }
         exerciseRepository.delete(exercise);
     }
