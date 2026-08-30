@@ -7,6 +7,8 @@ import com.mixsz.workouttracker.exception.custom.BusinessException;
 import com.mixsz.workouttracker.exception.custom.ResourceNotFoundException;
 import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.repository.ExerciseRepository;
+import com.mixsz.workouttracker.repository.WorkoutExerciseRepository;
+import com.mixsz.workouttracker.repository.WorkoutLogExerciseRepository;
 import com.mixsz.workouttracker.specification.ExerciseSpecification;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,14 +28,21 @@ import java.util.UUID;
 public class ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
+    private final WorkoutExerciseRepository workoutExerciseRepository;
+    private final WorkoutLogExerciseRepository workoutLogExerciseRepository;
 
     private final RestTemplate restTemplate;
 
     @Value("${ninja.api.key}")
     private String ninjaApiKey;
 
-    public ExerciseService(ExerciseRepository exerciseRepository, RestTemplate restTemplate) {
+    public ExerciseService(ExerciseRepository exerciseRepository,
+                           WorkoutExerciseRepository workoutExerciseRepository,
+                           WorkoutLogExerciseRepository workoutLogExerciseRepository,
+                           RestTemplate restTemplate) {
         this.exerciseRepository = exerciseRepository;
+        this.workoutExerciseRepository = workoutExerciseRepository;
+        this.workoutLogExerciseRepository = workoutLogExerciseRepository;
         this.restTemplate = restTemplate;
     }
 
@@ -94,6 +103,10 @@ public class ExerciseService {
     @Transactional
     public void delete(UUID id){
         Exercise exercise = this.findById(id);
+        if (workoutExerciseRepository.existsByExercise(exercise)
+                || workoutLogExerciseRepository.existsByExercise(exercise)) {
+            throw new BusinessException("Este exercício está em uso em treinos ou no histórico e não pode ser excluído.");
+        }
         exerciseRepository.delete(exercise);
     }
 

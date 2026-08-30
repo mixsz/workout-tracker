@@ -1,5 +1,6 @@
 package com.mixsz.workouttracker.repository;
 
+import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.model.WorkoutLog;
 import com.mixsz.workouttracker.model.WorkoutLogExercise;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +16,7 @@ import java.util.UUID;
 public interface WorkoutLogExerciseRepository extends JpaRepository<WorkoutLogExercise, UUID> {
     List<WorkoutLogExercise> findByWorkoutLogOrderByPositionAsc(WorkoutLog workoutLog);
     Optional<WorkoutLogExercise> findByWorkoutLogIdAndExerciseId(UUID workoutLogId, UUID exerciseId);
+    boolean existsByExercise(Exercise exercise);
 
     @Query("SELECT wle.workoutLog.id AS workoutLogId, " +
             "COUNT(wle) AS planned, " +

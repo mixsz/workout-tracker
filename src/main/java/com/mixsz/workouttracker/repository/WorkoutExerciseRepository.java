@@ -1,5 +1,6 @@
 package com.mixsz.workouttracker.repository;
 
+import com.mixsz.workouttracker.model.Exercise;
 import com.mixsz.workouttracker.model.Workout;
 import com.mixsz.workouttracker.model.WorkoutExercise;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +16,5 @@ public interface WorkoutExerciseRepository extends JpaRepository <WorkoutExercis
     Optional<WorkoutExercise> findByWorkoutIdAndExerciseId(UUID workoutId, UUID exerciseId);
     int countByWorkout(Workout workout);
     List<WorkoutExercise> findByWorkoutAndPositionGreaterThan(Workout workout, int position);
+    boolean existsByExercise(Exercise exercise);
 }
