@@ -3,6 +3,8 @@
 API REST para gerenciamento de treinos de academia, permitindo criar rotinas,
 registrar exercícios e treinos executados e acompanhar progresso ao longo do tempo.
 
+> Este repositório contém apenas o back-end (API). O front-end está em [namefit-frontend](https://github.com/mixsz/namefit-frontend).
+
 ## Tecnologias
 
 - Java 21
