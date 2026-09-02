@@ -199,7 +199,7 @@ src/main/java/com/mixsz/workouttracker/
 [![Diagrama ER](https://github.com/mixsz/workout-tracker/raw/main/assets/er-diagram.png)](/mixsz/workout-tracker/blob/main/assets/er-diagram.png)
 
 > Obs: o diagrama ER está desatualizado em relação aos campos mais recentes
-> (exemplo: `description` em Exercise, `finishedAt` em WorkoutLog, avatar/role em User).
+> (exemplo: `description` em Exercise, `finishedAt` em WorkoutLog, `avatarId` em User).
 
 ## Status do projeto
 
