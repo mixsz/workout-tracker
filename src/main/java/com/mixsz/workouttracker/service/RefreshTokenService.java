@@ -44,4 +44,9 @@
             refreshTokenRepository.delete(refreshToken);
         }
 
+        public RefreshToken rotateRefreshToken(RefreshToken oldToken){
+            refreshTokenRepository.delete(oldToken);
+            return createRefreshToken(oldToken.getUser());
+        }
+
     }

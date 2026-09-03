@@ -86,8 +86,9 @@ public class AuthController {
 
         User user = refreshToken.getUser();
         var newToken = tokenService.generateToken(user);
+        var newRefreshToken = refreshTokenService.rotateRefreshToken(refreshToken);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(newToken, refreshToken.getToken()));
+        return ResponseEntity.status(HttpStatus.OK).body(new LoginResponseDTO(newToken, newRefreshToken.getToken()));
     }
 
     @PostMapping("/logout")

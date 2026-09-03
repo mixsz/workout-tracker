@@ -90,14 +90,14 @@ Usuários com role `ADMIN` têm acesso adicional às rotas de escrita de `/exerc
 
 ### Auth (`/auth`)
 
-| Método | Rota           | Descrição                                 |
-| ------ | -------------- | ------------------------------------------ |
-| GET    | /auth/users    | Lista todos os usuários cadastrados       |
-| GET    | /auth/me       | Retorna dados do usuário logado           |
-| POST   | /auth/login    | Autentica e retorna tokens                |
-| POST   | /auth/register | Cria um novo usuário                      |
-| POST   | /auth/refresh  | Gera novo token a partir do refresh token |
-| POST   | /auth/logout   | Invalida o refresh token                  |
+| Método | Rota           | Descrição                                   |
+| ------ | -------------- |---------------------------------------------|
+| GET    | /auth/users    | Lista todos os usuários cadastrados _(ADMIN)_   |
+| GET    | /auth/me       | Retorna dados do usuário logado             |
+| POST   | /auth/login    | Autentica e retorna tokens                  |
+| POST   | /auth/register | Cria um novo usuário                        |
+| POST   | /auth/refresh  | Gera novo token a partir do refresh token   |
+| POST   | /auth/logout   | Invalida o refresh token                    |
 
 ### User (`/user`)
 
